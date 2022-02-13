@@ -1,4 +1,4 @@
-const ToDo = artifacts.require("TaskJournal");
+const TaskJournal = artifacts.require("TaskJournal");
 
 module.exports = function(deployer) {
   // deployer.deploy(ConvertLib);

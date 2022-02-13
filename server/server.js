@@ -1,6 +1,9 @@
 import express from 'express';
 import journalRoutes from './routes/journalRoutes.js'
 
+// const express = require('express');
+// const journalRoutes = require('./routes/journalRoutes.js');
+
 const app = express();
 const port = 3000;
 
@@ -8,6 +11,7 @@ const port = 3000;
 //   res.send('Hello World!')
 // });
 
+app.use(express.json()); 
 app.use('/', journalRoutes);
 
 app.listen(port, () => {

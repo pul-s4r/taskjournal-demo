@@ -22,8 +22,22 @@ contract TaskJournal {
 
   }
 
-  function createTask(uint id, string memory _name, string memory _description, uint _dateDue) public {
+  function createTask(string memory _name, string memory _description, uint _dateDue) public {
 
+  }
+
+  function getTaskIds() public view returns(uint[] memory) {
+    return taskIds;
+  }
+
+  function getTask(uint id) taskExists(id) public view returns(uint, string memory, string memory, uint, uint) {
+    return(
+      id,
+      tasks[id].name,
+      tasks[id].description,
+      tasks[id].dateCreated,
+      tasks[id].dateDue
+    );
   }
 
   function modifyTaskDesc(uint id, string memory _newDescription, string memory _reason) taskExists(id) public {
@@ -38,8 +52,8 @@ contract TaskJournal {
     emit TaskModifiedDate(id, _oldDate, _newDate, _reason);
   }
 
-  function delayTaskByDays(uint id, uint _from, uint _numDays, string memory _reason) taskExists(id) public {
-      modifyTaskDate(id, _from + _numDays * 1 days, _reason);
+  function delayTaskByDays(uint id, uint _numDays, string memory _reason) taskExists(id) public {
+      modifyTaskDate(id, tasks[id].dateDue + _numDays * 1 days, _reason);
   }
 
   modifier taskExists(uint id) {
