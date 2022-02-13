@@ -26,8 +26,8 @@ class JournalState {
     //   var account = await AccountActions.getAccount(this.web3);
     //   return account;
     // };
-    this.account = AccountActions.getAccount(this.web3);
-    this.instance = this.contractdef.at(this.address);
+    // this.account = AccountActions.getAccount(this.web3);
+    // this.instance = this.contractdef.at(this.address);
 
     return new Promise((resolve, reject) => {
       AccountActions.getAccount(this.web3)

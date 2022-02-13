@@ -12,7 +12,8 @@ const sendStatusMessage = async (req, res) => {
 };
 
 router.get('/', sendStatusMessage);
-router.post('/getTasks', JournalActions.getTasks);
+router.get('/getTasks', JournalActions.getTasks);
+router.get('/getTaskIds', JournalActions.getTaskIds);
 router.post('/create', JournalActions.createTask);
 router.post('/modify', JournalActions.modifyTaskDesc);
 router.post('/delay', JournalActions.getTasks);
