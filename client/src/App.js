@@ -1,23 +1,25 @@
+import React, { useState, useEffect } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
 import logo from './logo.svg';
-import './App.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
-function App() {
+import TaskTable from './components/TaskTable.jsx';
+import TaskAddForm from './components/TaskAddForm.jsx';
+import TaskEditForm from './components/TaskEditForm.jsx';
+
+const App = () => {
+  const [title, setTitle] = React.useState("Home");
+  const [username, setUsername] = React.useState("John Doe");
+  const [activeProfileId, setActiveProfileId] = React.useState("A1B2C3");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Container>
+        <h1>Manager - {username}</h1>
+        <TaskTable />
+        <TaskAddForm />
+        <TaskEditForm />
+      </Container>
     </div>
   );
 }
