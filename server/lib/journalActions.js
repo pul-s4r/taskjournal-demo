@@ -34,10 +34,11 @@ const JournalActions = {
           taskIds.forEach((taskId) => {
             taskList.push(taskJournal.instance.getTask(taskId));
           });
-          res.status(200).json({'status': 'Success', 'payload': taskList});
+
           return Promise.all(taskList);
         })
         .then((tasks) => {
+          res.status(200).json({'status': 'Success', 'payload': tasks});
           resolve(tasks);
         })
         .catch((error) => {
@@ -73,13 +74,13 @@ const JournalActions = {
         });
     });
   },
-  modifyTaskDesc: async (data) => {
+  modifyTaskDesc: async (req, res) => {
     // let id = data.id;
     // let desc = data.description;
     // let reas  = data.reason; // check
-    let { id, desc, reason } = data;
+    let { id, desc, reason } = req.body;
     return new Promise((resolve, reject) => {
-      taskJournal.instance.modifyTaskDesc(id, desc, reason)
+      taskJournal.instance.modifyTaskDesc(id, desc, reason, {from: taskJournal.account, gas:1000000})
         .then(() => {
           console.log('Attempted task modify');
           res.status(200).json({'payload': 'Success'});
@@ -90,13 +91,13 @@ const JournalActions = {
         });
     });
   },
-  delayTask: async (data) => {
+  delayTask: async (req, res) => {
     // let dueDate = data.newDueDate;
     // let numDays = data.numDays;
     // let reason  = data.reason; // check
-    let { id, numDays, reason } = data;
+    let { id, numDays, reason } = req.body;
     return new Promise((resolve, reject) => {
-      taskJournal.instance.delayTaskByDays(id, numDays, reason)
+      taskJournal.instance.delayTaskByDays(id, numDays, reason, {from: taskJournal.account, gas:1000000})
         .then(() => {
           console.log('Attempted task delay');
           res.status(200).json({'payload': 'Success'});

@@ -8,35 +8,42 @@ contract TaskJournal {
     string description;
     uint dateCreated;
     uint dateDue;
+    bool complete;
   }
 
   mapping(uint => TaskEntry) tasks;
   uint[] taskIds;
-  uint lastTaskId = 1;
+  uint taskIdCtr = 0;
 
-  event TaskCreated(uint id, string name, string description, uint dateCreated, uint dateDue);
+  event TaskCreated(uint id, string name, string description, uint dateCreated, uint dateDue, bool complete);
   event TaskModifiedDesc(uint id, string oldDescription, string newDescription, string reason);
   event TaskModifiedDate(uint id, uint oldDate, uint newDate, string reason);
+  event TaskCompleted(uint id);
 
   constructor() {
 
   }
 
+  // Fill in this function ...
   function createTask(string memory _name, string memory _description, uint _dateDue) public {
-
+    taskIdCtr++;
+    tasks[taskIdCtr] = TaskEntry(taskIdCtr, _name, _description, block.timestamp, _dateDue, false);
+    taskIds.push(taskIdCtr);
+    emit TaskCreated(taskIdCtr, _name, _description, block.timestamp, _dateDue, false);
   }
 
   function getTaskIds() public view returns(uint[] memory) {
     return taskIds;
   }
 
-  function getTask(uint id) taskExists(id) public view returns(uint, string memory, string memory, uint, uint) {
+  function getTask(uint id) taskExists(id) public view returns(uint, string memory, string memory, uint, uint, bool) {
     return(
       id,
       tasks[id].name,
       tasks[id].description,
       tasks[id].dateCreated,
-      tasks[id].dateDue
+      tasks[id].dateDue,
+      tasks[id].complete
     );
   }
 
@@ -56,8 +63,13 @@ contract TaskJournal {
       modifyTaskDate(id, tasks[id].dateDue + _numDays * 1 days, _reason);
   }
 
+  function markComplete(uint id) taskExists(id) public {
+    tasks[id].complete = true;
+    emit TaskCompleted(id);
+  }
+
   modifier taskExists(uint id) {
-    if(tasks[id].id == 0) {
+    if(tasks[id].id <= 0) {
       revert();
     }
     _;
