@@ -3,6 +3,8 @@ import { Container, Row, Col } from 'react-bootstrap';
 import logo from './logo.svg';
 import 'bootstrap/dist/css/bootstrap.css';
 
+import { TaskDataProvider } from './contexts/TaskDataContext.js';
+
 import TaskTable from './components/TaskTable.jsx';
 import TaskAddForm from './components/TaskAddForm.jsx';
 import TaskEditForm from './components/TaskEditForm.jsx';
@@ -15,10 +17,12 @@ const App = () => {
   return (
     <div className="app">
       <Container>
-        <h1>Manager - {username}</h1>
-        <TaskTable />
-        <TaskAddForm />
-        <TaskEditForm />
+        <h1>Task Manager - {title}</h1>
+        <TaskDataProvider>
+          <TaskTable />
+          <TaskAddForm />
+          <TaskEditForm />
+        </TaskDataProvider>
       </Container>
     </div>
   );

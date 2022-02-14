@@ -2,13 +2,16 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Table, Button, ButtonGroup, ToggleButton } from 'react-bootstrap';
 import { formatDate } from '../utils/utils.js';
 
-import { TaskDataProvider, TaskDataContext, TaskDataDispatchContext } from '../contexts/TaskDataContext.js';
+import TaskAPI from '../api/taskAPI.js';
+import { TaskDataContext, TaskDataDispatchContext } from '../contexts/TaskDataContext.js';
 
 const TaskTable = (props) => {
   // const [taskData, setTaskData] = useState([]);
 
   const taskData = useContext(TaskDataContext);
-  const setTaskData = useContext(TaskDataDispatchContext); 
+  const setTaskData = useContext(TaskDataDispatchContext);
+
+  // const [taskData, setTaskData] = useContext(TaskDataContext);
 
   const [displayOptions, setDisplayOptions] = useState({
     showCompleted: false,
@@ -21,7 +24,10 @@ const TaskTable = (props) => {
   ];
 
   const handleTaskDataUpdate = () => {
-
+    TaskAPI.getTasks().then((newData) => {
+      // console.log("new task data: ", newData);
+      setTaskData(newData.payload);
+    });
   };
 
   useEffect(() => {
@@ -53,6 +59,11 @@ const TaskTable = (props) => {
             ))}
           </ButtonGroup>
         </Col>
+        <Col sm={2}>
+          <Button onClick={() => handleTaskDataUpdate()}>
+            Refresh
+          </Button>
+        </Col>
       </Row>
       <Table responsive striped size="sm">
         <thead>
@@ -68,13 +79,13 @@ const TaskTable = (props) => {
         </thead>
         <tbody>
           {
-            Array.isArray(taskData) && taskData.length ? taskData.map((task) => (
+            typeof taskData !== 'undefined' && Array.isArray(taskData) && taskData.length ? taskData.map((task) => (
               <tr>
                 <th>{task[0]}</th>
                 <th>{task[1]}</th>
                 <th>{task[2]}</th>
-                <th>{task[3]}</th>
-                <th>{task[4]}</th>
+                <th>{formatDate(Number(`0x${task[3]}`))}</th>
+                <th>{formatDate(Number(`0x${task[4]}`))}</th>
                 <th>{task[5] === true ? "Yes" : "No"}</th>
                 <th></th>
               </tr>
