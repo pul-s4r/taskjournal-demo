@@ -43,6 +43,7 @@ const JournalActions = {
         })
         .catch((error) => {
           reject(error);
+          res.status(400).json({'status': 'Error', 'error': error});
         });
     });
   },
@@ -55,7 +56,7 @@ const JournalActions = {
         })
         .catch((error) => {
           reject(error);
-          res.status(400).json({'error': error});
+          res.status(400).json({'status': 'Error', 'error': error});
         });
     });
   },
@@ -70,7 +71,7 @@ const JournalActions = {
         })
         .catch((error) => {
           console.log(`Error encountered in create task: ${error}`);
-          res.status(400).json({'error': error});
+          res.status(400).json({'status': 'Error', 'error': error});
         });
     });
   },
@@ -80,14 +81,14 @@ const JournalActions = {
     // let reas  = data.reason; // check
     let { id, desc, reason } = req.body;
     return new Promise((resolve, reject) => {
-      taskJournal.instance.modifyTaskDesc(id, desc, reason, {from: taskJournal.account, gas:1000000})
+      taskJournal.instance.modifyTaskDesc(Number(id), desc, reason, {from: taskJournal.account, gas:1000000})
         .then(() => {
           console.log('Attempted task modify');
           res.status(200).json({'payload': 'Success'});
         })
         .catch((error) => {
           console.log(`Error encountered in modify task: ${error}`)
-          res.status(400).json({'error': error});
+          res.status(400).json({'status': 'Error', 'error': error});
         });
     });
   },
@@ -96,15 +97,16 @@ const JournalActions = {
     // let numDays = data.numDays;
     // let reason  = data.reason; // check
     let { id, numDays, reason } = req.body;
+    console.log("Got: ", req.body);
     return new Promise((resolve, reject) => {
-      taskJournal.instance.delayTaskByDays(id, numDays, reason, {from: taskJournal.account, gas:1000000})
+      taskJournal.instance.delayTaskByDays(Number(id), Number(numDays), reason, {from: taskJournal.account, gas:1000000})
         .then(() => {
           console.log('Attempted task delay');
           res.status(200).json({'payload': 'Success'});
         })
         .catch((error) => {
           console.log(`Error encountered in delay task: ${error}`)
-          res.status(400).json({'error': error});
+          res.status(400).json({'status': 'Error', 'error': error});
         });
     });
   }
