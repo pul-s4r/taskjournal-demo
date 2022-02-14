@@ -3,6 +3,20 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
 
 const TaskAddForm = (props) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    desc: "",
+    due:  "",
+  });
+
+  const handleFormSubmit = () => {
+
+  };
+
+  const handleFormClear = () => {
+
+  };
+
   return(
     <Container>
       <Row>
@@ -18,8 +32,8 @@ const TaskAddForm = (props) => {
             <Form.Control
               id="inputTaskName"
               placeholder="Task Name"
-              value={""}
-              onChange={(e) => {}}
+              value={formData.name}
+              onChange={(e) => setFormData({...formData, name: e.target.value})}
             />
           </Col>
         </Form.Group>
@@ -33,8 +47,8 @@ const TaskAddForm = (props) => {
             <Form.Control
               id="inputTaskDesc"
               placeholder="Description"
-              value={""}
-              onChange={(e) => {}}
+              value={formData.desc}
+              onChange={(e) => setFormData({...formData, desc: e.target.value})}
             />
           </Col>
         </Form.Group>
@@ -49,8 +63,8 @@ const TaskAddForm = (props) => {
               id="inputTaskDeadline"
               placeholder="Deadline"
               type="date"
-              value={""}
-              onChange={(e) => {}}
+              value={formData.due}
+              onChange={(e) => setFormData({...formData, due: e.target.value})}
             />
           </Col>
         </Form.Group>
@@ -60,7 +74,7 @@ const TaskAddForm = (props) => {
           <Col sm={2}>
             <Button
               variant="primary"
-              onClick={() => {}}
+              onClick={() => handleFormSubmit()}
             >
               Add Task
             </Button>
@@ -68,7 +82,7 @@ const TaskAddForm = (props) => {
           <Col sm={2}>
             <Button
               variant="danger"
-              onClick={() => {}}
+              onClick={() => handleFormClear()}
               >
               Clear
             </Button>
