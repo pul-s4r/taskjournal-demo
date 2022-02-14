@@ -80,7 +80,7 @@ const TaskTable = (props) => {
         <tbody>
           {
             typeof taskData !== 'undefined' && Array.isArray(taskData) && taskData.length ? taskData.map((task) => (
-              <tr>
+              <tr key={`taskData${task[0]}`}>
                 <th>{task[0]}</th>
                 <th>{task[1]}</th>
                 <th>{task[2]}</th>

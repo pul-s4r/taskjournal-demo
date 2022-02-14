@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-
+import { Container, Row, Col, Form, Button, Badge } from 'react-bootstrap';
+import TaskAPI from '../api/taskAPI.js';
 
 const TaskAddForm = (props) => {
   const [formData, setFormData] = useState({
@@ -8,13 +8,26 @@ const TaskAddForm = (props) => {
     desc: "",
     due:  "",
   });
+  const [displayOptions, setDisplayOptions] = useState({
+    status: "Pending",
+  });
 
   const handleFormSubmit = () => {
-
+    // console.log("Sending: ", formData.name, formData.desc, Date(formData.due))
+    TaskAPI.createTask(formData.name, formData.desc, formData.due).then((payload) => {
+      setDisplayOptions({...displayOptions, status: payload.status});
+    });
   };
 
   const handleFormClear = () => {
-
+    setFormData({
+      name: "",
+      desc: "",
+      due:  "",
+    });
+    setDisplayOptions({
+      status: "Pending",
+    });
   };
 
   return(
@@ -22,7 +35,7 @@ const TaskAddForm = (props) => {
       <Row>
         <h1>Add Entry</h1>
       </Row>
-        <Form.Group className="row form_elem_p mb-3 align-items-center" controlId="inputTaskName">
+        <Form.Group className="row form_elem_p mb-3 align-items-center">
           <Col sm={2}>
             <Form.Label>
               Task Name
@@ -37,7 +50,7 @@ const TaskAddForm = (props) => {
             />
           </Col>
         </Form.Group>
-        <Form.Group className="row form_elem_p mb-3 align-items-center" controlId="inputTaskDesc">
+        <Form.Group className="row form_elem_p mb-3 align-items-center">
           <Col sm={2}>
             <Form.Label>
               Description
@@ -52,7 +65,7 @@ const TaskAddForm = (props) => {
             />
           </Col>
         </Form.Group>
-        <Form.Group className="row form_elem_p mb-3 align-items-center" controlId="inputTaskDeadline">
+        <Form.Group className="row form_elem_p mb-3 align-items-center">
           <Col sm={2}>
             <Form.Label>
               Deadline
@@ -86,6 +99,9 @@ const TaskAddForm = (props) => {
               >
               Clear
             </Button>
+          </Col>
+          <Col sm={2}>
+            <Badge bg={(displayOptions.status === "Success" ? "success" : displayOptions.status === "Error" ? "danger" : "secondary")}>{displayOptions.status}</Badge>
           </Col>
         </Row>
 
