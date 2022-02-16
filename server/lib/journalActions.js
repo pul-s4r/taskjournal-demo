@@ -1,28 +1,39 @@
 import JournalState from './journalState.js';
+import fetch from "node-fetch";
+import axios from 'axios';
 
 const config = {
   ethereumUrl: 'http://localhost:9545',
 };
+const bpeBaseUrl = 'http://localhost:8080/engine-rest';
+const bpeProcessName = 'ApproveClaim';
+const bpeEndpoint = `/process-definition/key/${bpeProcessName}/start`;
+
+/* TODO: Set up long polling of camunda instance */
+/* TODO: Convert data structure to map*/
+var bpeProcessId = {};
+var bpeProcessDefId = {};
+// const historicalEndpoint = `/history/variable-instance?variableName=${"approved"}?processInstanceId=${processInstanceId}`;
+
+const delayTaskActionStateDefault = {
+  id: 0,
+  numDays: 0,
+  reason: "",
+};
+
+var delayTaskActionState = delayTaskActionStateDefault;
 
 var taskJournal = new JournalState(config);
 taskJournal.setup()
-  // .then(() => {
-  //   return taskJournal.init();
-  // })
   .then(() => {
     console.log('Successfully initialised contract state');
     console.log('at address: ', taskJournal.address);
     console.log('using account: ', taskJournal.account);
-    // console.log("contract member 'createTask': ", taskJournal.instance.createTask);
   })
   .catch((error) => {
     console.error(`Error initialising contract state: ${error}`);
   })
 ;
-
-// console.log('State: ', taskJournal.instance);
-// console.log('address: ', taskJournal.address);
-// console.log('account: ', taskJournal.account);
 
 const JournalActions = {
   // rewrite to accept taskjournal
@@ -76,9 +87,6 @@ const JournalActions = {
     });
   },
   modifyTaskDesc: async (req, res) => {
-    // let id = data.id;
-    // let desc = data.description;
-    // let reas  = data.reason; // check
     let { id, desc, reason } = req.body;
     return new Promise((resolve, reject) => {
       taskJournal.instance.modifyTaskDesc(Number(id), desc, reason, {from: taskJournal.account, gas:1000000})
@@ -92,12 +100,101 @@ const JournalActions = {
         });
     });
   },
+  delayTaskRequest: async (req, res) => {
+    // Fill this in with call to Camunda process engine
+    let { id, numDays, reason } = req.body;
+    const vars = {
+      "variables": {
+        "id": {
+          "value": id,
+          "type": "Long"
+        },
+        "numDays": {
+          "value": numDays,
+          "type": "Long"
+        },
+        "reason": {
+          "value": reason,
+          "type": "String"
+        },
+        "approved": {
+          "value": "CLAIM_PENDING",
+          "type": "String"
+        }
+      },
+      "businessKey": null
+    };
+
+    // Start task on process engine
+    // TODO: Rewrite to poll the task engine for the outcome variable
+    await axios.post(`${bpeBaseUrl}${bpeEndpoint}`, vars)
+      .then((response) => { return response.data; })
+      .then((data) => {
+        bpeProcessId[id] = data.id;
+        bpeProcessDefId[id] = data.definitionId;
+        // Fill DelayTaskActionState
+        const reqData = req.body;
+        delayTaskActionState = {
+          id: reqData.id,
+          numDays: reqData.numDays,
+          reason: reqData.reason,
+        };
+      }).catch((error) => {
+        console.log(`Error requesting delaying task: ${error}`);
+        res.status(400).json({'status': 'Failure', 'error': error});
+      });
+
+    return new Promise((resolve, reject) => {
+      res.status(200).json({'status': 'Pending'});
+    });
+  },
+  delayTaskOutcome: async (req, res) => {
+    // Do processing
+    const { id, processDefinitionId, outcome } = req.body;
+    const result = {};
+    if (outcome === true && typeof bpeProcessId[delayTaskActionState.id] !== 'undefined' && id === bpeProcessId[delayTaskActionState.id]) {
+      console.log("Attempting task delay with data: ", delayTaskActionState);
+
+      return new Promise((resolve, reject) => {
+        req = {
+          ...req,
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json;charset=utf-8"
+          },
+          body: delayTaskActionState,
+        };
+
+        JournalActions.delayTask(req, res).then(() => {
+          bpeProcessId[delayTaskActionState.id] = '';
+          bpeProcessDefId[delayTaskActionState.id] = '';
+          delayTaskActionState = delayTaskActionStateDefault;
+          res.status(200).json({'status': 'Success'});
+        }).catch((error) => {
+          console.log(`Error delaying task: ${error}`)
+          res.status(400).json({'status': 'Failure', 'error': error});
+        });
+      });
+    } else if (outcome === true) {
+      console.log(`Warning: IDs do not match (expected: ${bpeProcessId[delayTaskActionState.id]}, got: ${id})`);
+      return new Promise((resolve, reject) => {
+        res.status(200).json({'status': 'Failure'});
+      });
+    } else {
+      console.log("Delay attempt rejected");
+      return new Promise((resolve, reject) => {
+        bpeProcessId[delayTaskActionState.id] = '';
+        bpeProcessDefId[delayTaskActionState.id] = '';
+        delayTaskActionState = delayTaskActionStateDefault;
+        res.status(200).json({'status': 'Failure'});
+      });
+    }
+  },
   delayTask: async (req, res) => {
     // let dueDate = data.newDueDate;
     // let numDays = data.numDays;
     // let reason  = data.reason; // check
     let { id, numDays, reason } = req.body;
-    console.log("Got: ", req.body);
     return new Promise((resolve, reject) => {
       taskJournal.instance.delayTaskByDays(Number(id), Number(numDays), reason, {from: taskJournal.account, gas:1000000})
         .then(() => {
