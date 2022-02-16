@@ -47,7 +47,8 @@ client.subscribe("ApproveClaimFinishSuccess", async function({ task, taskService
   const processVariables = new Variables();
   await taskService.complete(task, processVariables);
   axios.post(`http://localhost:8000/delayOutcome`, {
-    id: task.executionId,
+    id: task.variables.get("id"), 
+    processId: task.executionId,
     processDefinitionId: task.processDefinitionId,
     outcome: true
   }).then((response) => {
@@ -67,7 +68,8 @@ client.subscribe("ApproveClaimFinishFailure", async function({ task, taskService
   await taskService.complete(task, processVariables);
 
   axios.post(`http://localhost:8000/delayOutcome`, {
-    id: task.executionId,
+    id: task.variables.get("id"), 
+    processId: task.executionId,
     processDefinitionId: task.processDefinitionId,
     outcome: false
   }).then((response) => {
