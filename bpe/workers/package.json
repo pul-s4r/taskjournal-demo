@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "start": "nodemon filterClaims.js"
+  },
+  "dependencies": {
+    "axios": "^0.26.0",
+    "camunda-external-task-client-js": "^2.1.1",
+    "node-fetch": "^3.2.0",
+    "nodemon": "^2.0.15"
+  }
+}
