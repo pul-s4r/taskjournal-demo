@@ -21,7 +21,8 @@ const delayTaskActionStateDefault = {
   reason: "",
 };
 
-var delayTaskActionState = delayTaskActionStateDefault;
+var delayTaskActionState = {};
+// ... {[id]: {numDays: 2, reason: "Something"}}
 
 var taskJournal = new JournalState(config);
 taskJournal.setup()
@@ -132,16 +133,14 @@ const JournalActions = {
       .then((data) => {
         bpeProcessId[id] = data.id;
         bpeProcessDefId[id] = data.definitionId;
-        // Fill DelayTaskActionState
         const reqData = req.body;
-        delayTaskActionState = {
-          id: reqData.id,
-          numDays: reqData.numDays,
-          reason: reqData.reason,
-        };
+        delayTaskActionState[reqData.id] = {id: reqData.id, numDays: reqData.numDays, reason: reqData.reason};
+        console.log("DelayTaskActionStateHash: ", delayTaskActionState);
+        return Promise.resolve(data);
       }).catch((error) => {
         console.log(`Error requesting delaying task: ${error}`);
         res.status(400).json({'status': 'Failure', 'error': error});
+        return Promise.reject(error);
       });
 
     return new Promise((resolve, reject) => {
@@ -150,60 +149,61 @@ const JournalActions = {
   },
   delayTaskOutcome: async (req, res) => {
     // Do processing
-    const { id, processDefinitionId, outcome } = req.body;
-    const result = {};
-    if (outcome === true && typeof bpeProcessId[delayTaskActionState.id] !== 'undefined' && id === bpeProcessId[delayTaskActionState.id]) {
-      console.log("Attempting task delay with data: ", delayTaskActionState);
+    const { id, processId, processDefinitionId, outcome } = req.body;
+    var result = {};
+    if (outcome === true && id in delayTaskActionState && typeof bpeProcessId[id] !== 'undefined' && processId === bpeProcessId[id]) {
+      console.log("Attempting task delay with data: ", delayTaskActionState[id]);
+
+      req = {
+        ...req,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8"
+        },
+        body: delayTaskActionState[id],
+      };
+
+      result = await JournalActions.delayTask(req, res).then((data) => {
+        bpeProcessId[id] = '';
+        bpeProcessDefId[id] = '';
+        delete delayTaskActionState[id];
+        return Promise.resolve({'status': 'Success'});
+      }).catch((error) => {
+        console.log(`Error delaying task: ${error}`);
+        return Promise.reject({status: 'Error', error: new Error(error)});
+      });
 
       return new Promise((resolve, reject) => {
-        req = {
-          ...req,
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json;charset=utf-8"
-          },
-          body: delayTaskActionState,
-        };
-
-        JournalActions.delayTask(req, res).then(() => {
-          bpeProcessId[delayTaskActionState.id] = '';
-          bpeProcessDefId[delayTaskActionState.id] = '';
-          delayTaskActionState = delayTaskActionStateDefault;
-          res.status(200).json({'status': 'Success'});
-        }).catch((error) => {
-          console.log(`Error delaying task: ${error}`)
-          res.status(400).json({'status': 'Failure', 'error': error});
-        });
+        resolve(result);
       });
     } else if (outcome === true) {
-      console.log(`Warning: IDs do not match (expected: ${bpeProcessId[delayTaskActionState.id]}, got: ${id})`);
+      console.log(`Warning: IDs do not match (expected: ${bpeProcessId[id]}, got: ${id})`);
       return new Promise((resolve, reject) => {
-        res.status(200).json({'status': 'Failure'});
+        resolve({'status': 'Failure', 'reason': 'Task IDs do not match or not found'});
       });
     } else {
       console.log("Delay attempt rejected");
       return new Promise((resolve, reject) => {
-        bpeProcessId[delayTaskActionState.id] = '';
-        bpeProcessDefId[delayTaskActionState.id] = '';
-        delayTaskActionState = delayTaskActionStateDefault;
-        res.status(200).json({'status': 'Failure'});
+        bpeProcessId[id] = '';
+        bpeProcessDefId[id] = '';
+        delete delayTaskActionState[id];
+        resolve({'status': 'Failure', 'reason': 'Change rejected'});
       });
     }
   },
   delayTask: async (req, res) => {
-    // let dueDate = data.newDueDate;
-    // let numDays = data.numDays;
-    // let reason  = data.reason; // check
     let { id, numDays, reason } = req.body;
     return new Promise((resolve, reject) => {
       taskJournal.instance.delayTaskByDays(Number(id), Number(numDays), reason, {from: taskJournal.account, gas:1000000})
         .then(() => {
-          console.log('Attempted task delay');
+          console.log('Attempted task delay: success');
           res.status(200).json({'payload': 'Success'});
+          resolve({'payload': 'Success'});
         })
         .catch((error) => {
           console.log(`Error encountered in delay task: ${error}`)
           res.status(400).json({'status': 'Error', 'error': error});
+          reject({'status': 'Error', 'error': error});
         });
     });
   }
