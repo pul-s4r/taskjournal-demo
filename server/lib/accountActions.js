@@ -10,6 +10,6 @@ const AccountActions = {
       });
     });
   },
-}; 
+};
 
 export default AccountActions;
