@@ -195,8 +195,21 @@ const JournalActions = {
     let { id, numDays, reason } = req.body;
     return new Promise((resolve, reject) => {
       taskJournal.instance.delayTaskByDays(Number(id), Number(numDays), reason, {from: taskJournal.account, gas:1000000})
-        .then(() => {
+        .then((txObject) => {
           console.log('Attempted task delay: success');
+          console.log('Transaction object: ');
+          console.log(txObject);
+          var transactionReceipt = taskJournal.web3.eth.getTransactionReceipt(txObject.tx)
+            .then((data) => {
+              return Promise.resolve(data);
+            })
+            .then((data) => {
+              console.log('Transaction details: ');
+              console.log(data);
+              return data; 
+            }).catch((error) => {
+              console.log('Error printing transaction receipt: ', error);
+            });
           res.status(200).json({'payload': 'Success'});
           resolve({'payload': 'Success'});
         })
