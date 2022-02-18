@@ -1,10 +1,13 @@
 import Web3 from 'web3';
 import TruffleContract from '@truffle/contract';
+import { readFile } from 'fs/promises';
 
 // import artifact from '../../build/contracts/TaskJournal.json';
 import AccountActions from './accountActions.js';
-import artifact from '../temp/artifact.js';
-
+// import artifact from '../temp/artifact.js';
+const artifact = JSON.parse(
+  await readFile(new URL('../../build/contracts/TaskJournal.json', import.meta.url))
+);
 
 class JournalState {
   constructor(config) {
