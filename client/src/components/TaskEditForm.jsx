@@ -37,7 +37,7 @@ const TaskEditForm = (props) => {
   return(
     <Container>
       <Row>
-        <h1>Delay Task</h1>
+        <h1>Delay Job</h1>
       </Row>
         <Form.Group className="row form_elem_p mb-3 align-items-center">
           <Col sm={2}>
@@ -45,7 +45,7 @@ const TaskEditForm = (props) => {
               Task ID
             </Form.Label>
           </Col>
-          <Col sm={6} md={6}>
+          <Col sm={4} md={4}>
             <Form.Select
               id="selectTask"
               placeholder="Task ID"
@@ -69,7 +69,7 @@ const TaskEditForm = (props) => {
               Delay Period (Days)
             </Form.Label>
           </Col>
-          <Col sm={6} md={6}>
+          <Col sm={4} md={4}>
             <Form.Control
               id="inputDelayDuration"
               placeholder="# Days"
@@ -85,7 +85,7 @@ const TaskEditForm = (props) => {
               Reason for Change
             </Form.Label>
           </Col>
-          <Col sm={6} md={6}>
+          <Col sm={4} md={4}>
             <Form.Control
               id="inputReason"
               placeholder="Description"
@@ -97,7 +97,7 @@ const TaskEditForm = (props) => {
         <Row>
           <Col sm={2}>
           </Col>
-          <Col sm={2}>
+          <Col sm={1}>
             <Button
               variant="primary"
               onClick={() => handleFormSubmit()}
@@ -105,7 +105,7 @@ const TaskEditForm = (props) => {
               Submit
             </Button>
           </Col>
-          <Col sm={2}>
+          <Col sm={1}>
             <Button
               variant="danger"
               onClick={() => handleFormClear()}
@@ -113,7 +113,7 @@ const TaskEditForm = (props) => {
               Clear
             </Button>
           </Col>
-          <Col sm={2}>
+          <Col sm={1}>
             <Badge bg={(displayOptions.status === "Success" ? "success" : displayOptions.status === "Error" ? "danger" : "secondary")}>{displayOptions.status}</Badge>
           </Col>
         </Row>

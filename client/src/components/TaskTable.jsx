@@ -26,6 +26,7 @@ const TaskTable = (props) => {
   const handleTaskDataUpdate = () => {
     TaskAPI.getTasks().then((newData) => {
       // console.log("new task data: ", newData);
+      console.log(newData);
       setTaskData(newData.payload);
     });
   };
@@ -37,7 +38,7 @@ const TaskTable = (props) => {
   return(
     <Container>
       <Row>
-        <h1>Task List</h1>
+        <h1>Job List</h1>
       </Row>
       <Row>
         <Col sm={2} className="align-items-center">Show Completed: </Col>
@@ -73,6 +74,7 @@ const TaskTable = (props) => {
             <th>Description</th>
             <th>Date Created</th>
             <th>Deadline</th>
+            <th>Job Fee</th>
             <th>Completed</th>
             <th>Options</th>
           </tr>
@@ -80,13 +82,14 @@ const TaskTable = (props) => {
         <tbody>
           {
             typeof taskData !== 'undefined' && Array.isArray(taskData) && taskData.length ? taskData.map((task) => (
-              <tr key={`taskData${task[0]}`}>
-                <th>{task[0]}</th>
-                <th>{task[1]}</th>
-                <th>{task[2]}</th>
-                <th>{formatDate(Number(`0x${task[3]}`))}</th>
-                <th>{formatDate(Number(`0x${task[4]}`))}</th>
-                <th>{task[5] === true ? "Yes" : "No"}</th>
+              <tr key={`taskData${task['0']}`}>
+                <th>{task['0']}</th>
+                <th>{task['1']}</th>
+                <th>{task['2']}</th>
+                <th>{formatDate(Number(`0x${task['3']}`))}</th>
+                <th>{formatDate(Number(`0x${task['4']}`))}</th>
+                <th>{Number(`0x${task['5']}`)}</th>
+                <th>{task['6'] === true ? "Yes" : "No"}</th>
                 <th></th>
               </tr>
             ))

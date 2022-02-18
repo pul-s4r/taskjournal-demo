@@ -14,7 +14,7 @@ const TaskAddForm = (props) => {
 
   const handleFormSubmit = () => {
     // console.log("Sending: ", formData.name, formData.desc, Date(formData.due))
-    TaskAPI.createTask(formData.name, formData.desc, formData.due).then((payload) => {
+    TaskAPI.createTask(formData.name, formData.desc, formData.due, formData.fee).then((payload) => {
       setDisplayOptions({...displayOptions, status: payload.status});
     });
   };
@@ -24,6 +24,7 @@ const TaskAddForm = (props) => {
       name: "",
       desc: "",
       due:  "",
+      fee: 0,
     });
     setDisplayOptions({
       status: "Pending",
@@ -33,7 +34,7 @@ const TaskAddForm = (props) => {
   return(
     <Container>
       <Row>
-        <h1>Add Entry</h1>
+        <h1>Add Job</h1>
       </Row>
         <Form.Group className="row form_elem_p mb-3 align-items-center">
           <Col sm={2}>
@@ -41,7 +42,7 @@ const TaskAddForm = (props) => {
               Task Name
             </Form.Label>
           </Col>
-          <Col sm={6} md={6}>
+          <Col sm={4} md={4}>
             <Form.Control
               id="inputTaskName"
               placeholder="Task Name"
@@ -56,7 +57,7 @@ const TaskAddForm = (props) => {
               Description
             </Form.Label>
           </Col>
-          <Col sm={6} md={6}>
+          <Col sm={4} md={4}>
             <Form.Control
               id="inputTaskDesc"
               placeholder="Description"
@@ -71,7 +72,7 @@ const TaskAddForm = (props) => {
               Deadline
             </Form.Label>
           </Col>
-          <Col sm={6} md={6}>
+          <Col sm={4} md={4}>
             <Form.Control
               id="inputTaskDeadline"
               placeholder="Deadline"
@@ -81,18 +82,34 @@ const TaskAddForm = (props) => {
             />
           </Col>
         </Form.Group>
+        <Form.Group className="row form_elem_p mb-3 align-items-center">
+          <Col sm={2}>
+            <Form.Label>
+              Fee
+            </Form.Label>
+          </Col>
+          <Col sm={4} md={4}>
+            <Form.Control
+              id="inputTaskFee"
+              placeholder="Fee"
+              type="number"
+              value={formData.fee}
+              onChange={(e) => setFormData({...formData, fee: e.target.value})}
+            />
+          </Col>
+        </Form.Group>
         <Row>
           <Col sm={2}>
           </Col>
-          <Col sm={2}>
+          <Col sm={1}>
             <Button
               variant="primary"
               onClick={() => handleFormSubmit()}
             >
-              Add Task
+              Add
             </Button>
           </Col>
-          <Col sm={2}>
+          <Col sm={1}>
             <Button
               variant="danger"
               onClick={() => handleFormClear()}
@@ -100,7 +117,7 @@ const TaskAddForm = (props) => {
               Clear
             </Button>
           </Col>
-          <Col sm={2}>
+          <Col sm={1}>
             <Badge bg={(displayOptions.status === "Success" ? "success" : displayOptions.status === "Error" ? "danger" : "secondary")}>{displayOptions.status}</Badge>
           </Col>
         </Row>

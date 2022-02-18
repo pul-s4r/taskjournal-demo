@@ -18,7 +18,7 @@ const TaskAPI = {
       });
     return result;
   },
-  createTask: (name, desc, due) => {
+  createTask: (name, desc, due, fee) => {
     const options = {
       method: "POST",
       headers: {
@@ -28,6 +28,7 @@ const TaskAPI = {
         "name": name,
         "desc": desc,
         "due": due,
+        "fee": fee,
       }),
     };
 

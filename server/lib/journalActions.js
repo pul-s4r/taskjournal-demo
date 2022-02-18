@@ -43,14 +43,19 @@ const JournalActions = {
       taskJournal.instance.getTaskIds()
         .then((taskIds) => {
           const taskList = [];
+          const taskCom  = [];
           taskIds.forEach((taskId) => {
             taskList.push(taskJournal.instance.getTask(taskId));
+            taskCom.push(taskJournal.instance.getTaskCompletionStatus(taskId));
           });
 
-          return Promise.all(taskList);
+          return Promise.all([Promise.all(taskList), Promise.all(taskCom)]);
         })
         .then((tasks) => {
-          res.status(200).json({'status': 'Success', 'payload': tasks});
+          const taskList = tasks[0];
+          const taskCom = tasks[1];
+          taskList.forEach((task, idx) => {taskList[idx]['6'] = taskCom[idx]});
+          res.status(200).json({'status': 'Success', 'payload': taskList});
           resolve(tasks);
         })
         .catch((error) => {
@@ -73,10 +78,10 @@ const JournalActions = {
     });
   },
   createTask: async (req, res) => {
-    let { name, desc, due } = req.body;
+    let { name, desc, due, fee } = req.body;
     due = new Date(due);
     return new Promise((resolve, reject) => {
-      taskJournal.instance.createTask(name, desc, Math.floor(due.getTime()/1000), {from: taskJournal.account, gas:1000000})
+      taskJournal.instance.createTask(name, desc, Math.floor(due.getTime()/1000), Number(fee), {from: taskJournal.account, gas:1000000})
         .then(() => {
           console.log('Attempted task create');
           res.status(200).json({'status': 'Success'});
@@ -206,7 +211,7 @@ const JournalActions = {
             .then((data) => {
               console.log('Transaction details: ');
               console.log(data);
-              return data; 
+              return data;
             }).catch((error) => {
               console.log('Error printing transaction receipt: ', error);
             });
