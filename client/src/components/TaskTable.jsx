@@ -31,7 +31,7 @@ const TaskTable = (props) => {
 
   useEffect(() => {
 
-  }, []);
+  }, [displayOptions.showCompleted]);
 
   return(
     <Container>
@@ -51,7 +51,10 @@ const TaskTable = (props) => {
                 name="radio"
                 value={radio.value}
                 checked={radioValue === radio.value}
-                onChange={(e) => {setRadioValue(e.currentTarget.value); setDisplayOptions({...displayOptions, showCompleted: e.currentTarget.value})}}
+                onChange={(e) => {
+                  setRadioValue(eval(e.currentTarget.value));
+                  setDisplayOptions({...displayOptions, showCompleted: eval(e.currentTarget.value)});
+                }}
               >
                 {radio.name}
               </ToggleButton>
@@ -79,22 +82,25 @@ const TaskTable = (props) => {
         </thead>
         <tbody>
           {
-            typeof taskData !== 'undefined' && Array.isArray(taskData) && taskData.length ? taskData.map((task) => (
-              <tr key={`taskData${task['0']}`}>
-                <th>{task['0']}</th>
-                <th>{task['1']}</th>
-                <th>{task['2']}</th>
-                <th>{formatDate(Number(`0x${task['3']}`))}</th>
-                <th>{formatDate(Number(`0x${task['4']}`))}</th>
-                <th>{Number(`0x${task['5']}`)}</th>
-                <th>{task['6'] === true ? "Yes" : "No"}</th>
-                <th>
-                  <Button variant="outline-danger">
-                    Delete
-                  </Button>
-                </th>
-              </tr>
-            ))
+            typeof taskData !== 'undefined' && Array.isArray(taskData) && taskData.length ?
+              taskData.filter((task) => displayOptions.showCompleted === true ? task : (task['6'] === false ? task : undefined)
+            ).map((task) => (
+                <tr key={`taskData${task['0']}`}>
+                  <th>{task['0']}</th>
+                  <th>{task['1']}</th>
+                  <th>{task['2']}</th>
+                  <th>{formatDate(Number(`0x${task['3']}`))}</th>
+                  <th>{formatDate(Number(`0x${task['4']}`))}</th>
+                  <th>{Number(`0x${task['5']}`)}</th>
+                  <th>{task['6'] === true ? "Yes" : "No"}</th>
+                  <th>
+                    <Button variant="outline-danger">
+                      Delete
+                    </Button>
+                  </th>
+                </tr>
+              )
+            )
             : <tr>
               <td></td>
               <td></td>
