@@ -114,7 +114,7 @@ const TaskEditForm = (props) => {
             </Button>
           </Col>
           <Col sm={1}>
-            <Badge bg={(displayOptions.status === "Success" ? "success" : displayOptions.status === "Error" ? "danger" : "secondary")}>{displayOptions.status}</Badge>
+            <Badge bg={(displayOptions.status === "Success" ? "success" : displayOptions.status === "Error" ? "danger" : displayOptions.status === "Sent" ? "info" : "secondary")}>{displayOptions.status}</Badge>
           </Col>
         </Row>
 

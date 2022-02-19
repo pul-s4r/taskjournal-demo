@@ -148,7 +148,7 @@ const JournalActions = {
       });
 
     return new Promise((resolve, reject) => {
-      res.status(200).json({'status': 'Pending'});
+      res.status(202).json({'status': 'Sent'});
     });
   },
   delayTaskOutcome: async (req, res) => {
