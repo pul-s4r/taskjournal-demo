@@ -8,6 +8,7 @@ import { TaskDataProvider } from './contexts/TaskDataContext.js';
 import TaskTable from './components/TaskTable.jsx';
 import TaskAddForm from './components/TaskAddForm.jsx';
 import TaskEditForm from './components/TaskEditForm.jsx';
+import TaskCompleteForm from './components/TaskCompleteForm.jsx';
 
 const App = () => {
   const [title, setTitle] = React.useState("Home");
@@ -20,7 +21,14 @@ const App = () => {
         <h1>Task Manager - {title}</h1>
         <TaskDataProvider>
           <TaskTable />
-          <TaskAddForm />
+          <Row>
+            <Col>
+              <TaskAddForm />
+            </Col>
+            <Col>
+              <TaskCompleteForm />
+            </Col>
+          </Row>
           <TaskEditForm />
         </TaskDataProvider>
       </Container>

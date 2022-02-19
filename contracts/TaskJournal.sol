@@ -75,13 +75,20 @@ contract TaskJournal {
       modifyTaskDate(id, tasks[id].dateDue + _numDays * 1 days, _reason);
   }
 
-  function markComplete(uint id, string memory _reason) taskExists(id) public {
+  function markComplete(uint id, string memory _reason) taskExists(id) taskIsIncomplete(id) public {
     tasks[id].complete = true;
     emit TaskCompleted(id, _reason);
   }
 
   modifier taskExists(uint id) {
     if(tasks[id].id <= 0) {
+      revert();
+    }
+    _;
+  }
+
+  modifier taskIsIncomplete(uint id) {
+    if (tasks[id].complete) {
       revert();
     }
     _;

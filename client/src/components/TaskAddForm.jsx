@@ -37,12 +37,12 @@ const TaskAddForm = (props) => {
         <h1>Add Job</h1>
       </Row>
         <Form.Group className="row form_elem_p mb-3 align-items-center">
-          <Col sm={2}>
+          <Col sm={4}>
             <Form.Label>
               Task Name
             </Form.Label>
           </Col>
-          <Col sm={4} md={4}>
+          <Col sm={8} md={8}>
             <Form.Control
               id="inputTaskName"
               placeholder="Task Name"
@@ -52,12 +52,12 @@ const TaskAddForm = (props) => {
           </Col>
         </Form.Group>
         <Form.Group className="row form_elem_p mb-3 align-items-center">
-          <Col sm={2}>
+          <Col sm={4}>
             <Form.Label>
               Description
             </Form.Label>
           </Col>
-          <Col sm={4} md={4}>
+          <Col sm={8} md={8}>
             <Form.Control
               id="inputTaskDesc"
               placeholder="Description"
@@ -67,12 +67,12 @@ const TaskAddForm = (props) => {
           </Col>
         </Form.Group>
         <Form.Group className="row form_elem_p mb-3 align-items-center">
-          <Col sm={2}>
+          <Col sm={4}>
             <Form.Label>
               Deadline
             </Form.Label>
           </Col>
-          <Col sm={4} md={4}>
+          <Col sm={8} md={8}>
             <Form.Control
               id="inputTaskDeadline"
               placeholder="Deadline"
@@ -83,12 +83,12 @@ const TaskAddForm = (props) => {
           </Col>
         </Form.Group>
         <Form.Group className="row form_elem_p mb-3 align-items-center">
-          <Col sm={2}>
+          <Col sm={4}>
             <Form.Label>
               Fee
             </Form.Label>
           </Col>
-          <Col sm={4} md={4}>
+          <Col sm={8} md={8}>
             <Form.Control
               id="inputTaskFee"
               placeholder="Fee"
@@ -99,9 +99,9 @@ const TaskAddForm = (props) => {
           </Col>
         </Form.Group>
         <Row>
-          <Col sm={2}>
+          <Col sm={4}>
           </Col>
-          <Col sm={1}>
+          <Col sm={2}>
             <Button
               variant="primary"
               onClick={() => handleFormSubmit()}
@@ -109,7 +109,7 @@ const TaskAddForm = (props) => {
               Add
             </Button>
           </Col>
-          <Col sm={1}>
+          <Col sm={2}>
             <Button
               variant="danger"
               onClick={() => handleFormClear()}
@@ -117,7 +117,7 @@ const TaskAddForm = (props) => {
               Clear
             </Button>
           </Col>
-          <Col sm={1}>
+          <Col sm={2}>
             <Badge bg={(displayOptions.status === "Success" ? "success" : displayOptions.status === "Error" ? "danger" : "secondary")}>{displayOptions.status}</Badge>
           </Col>
         </Row>

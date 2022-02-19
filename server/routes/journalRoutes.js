@@ -18,5 +18,6 @@ router.post('/create', JournalActions.createTask);
 router.post('/modify', JournalActions.modifyTaskDesc);
 router.post('/delay', JournalActions.delayTaskRequest);
 router.post('/delayOutcome', JournalActions.delayTaskOutcome);
+router.post('/complete', JournalActions.completeTask); 
 
 export default router;
