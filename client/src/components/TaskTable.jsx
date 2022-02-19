@@ -25,8 +25,6 @@ const TaskTable = (props) => {
 
   const handleTaskDataUpdate = () => {
     TaskAPI.getTasks().then((newData) => {
-      // console.log("new task data: ", newData);
-      console.log(newData);
       setTaskData(newData.payload);
     });
   };
