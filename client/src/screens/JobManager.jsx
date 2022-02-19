@@ -16,8 +16,9 @@ const JobManager = (props) => {
   return (
     <Container>
       <Header/>
+      <h1>Contractor View</h1>
       <TaskDataProvider>
-        <TaskTable />
+        <TaskTable isEditable={true}/>
         <Row>
           <Col>
             <TaskAddForm />
