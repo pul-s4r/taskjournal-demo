@@ -83,7 +83,7 @@ const JournalActions = {
     return new Promise((resolve, reject) => {
       taskJournal.instance.createTask(name, desc, Math.floor(due.getTime()/1000), Number(fee), {from: taskJournal.account, gas:1000000})
         .then(() => {
-          console.log('Attempted task create');
+          console.log('Attempted task create: success');
           res.status(200).json({'status': 'Success'});
         })
         .catch((error) => {
@@ -97,8 +97,8 @@ const JournalActions = {
     return new Promise((resolve, reject) => {
       taskJournal.instance.modifyTaskDesc(Number(id), desc, reason, {from: taskJournal.account, gas:1000000})
         .then(() => {
-          console.log('Attempted task modify');
-          res.status(200).json({'payload': 'Success'});
+          console.log('Attempted task modify: success');
+          res.status(200).json({'status': 'Success'});
         })
         .catch((error) => {
           console.log(`Error encountered in modify task: ${error}`)
@@ -140,7 +140,6 @@ const JournalActions = {
         bpeProcessDefId[id] = data.definitionId;
         const reqData = req.body;
         delayTaskActionState[reqData.id] = {id: reqData.id, numDays: reqData.numDays, reason: reqData.reason};
-        console.log("DelayTaskActionStateHash: ", delayTaskActionState);
         return Promise.resolve(data);
       }).catch((error) => {
         console.log(`Error requesting delaying task: ${error}`);
@@ -201,22 +200,18 @@ const JournalActions = {
     return new Promise((resolve, reject) => {
       taskJournal.instance.delayTaskByDays(Number(id), Number(numDays), reason, {from: taskJournal.account, gas:1000000})
         .then((txObject) => {
-          console.log('Attempted task delay: success');
-          console.log('Transaction object: ');
           console.log(txObject);
           var transactionReceipt = taskJournal.web3.eth.getTransactionReceipt(txObject.tx)
             .then((data) => {
               return Promise.resolve(data);
             })
             .then((data) => {
-              console.log('Transaction details: ');
-              console.log(data);
               return data;
             }).catch((error) => {
               console.log('Error printing transaction receipt: ', error);
             });
-          res.status(200).json({'payload': 'Success'});
-          resolve({'payload': 'Success'});
+          res.status(200).json({'status': 'Success'});
+          resolve({'status': 'Success'});
         })
         .catch((error) => {
           console.log(`Error encountered in delay task: ${error}`)
