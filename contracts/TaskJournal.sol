@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.5.9;
 
-contract TaskJournal {
+import './PayableBasic.sol';
+
+contract TaskJournal is PayableBasic {
   struct TaskEntry {
     uint id;
     string name;
@@ -78,6 +80,26 @@ contract TaskJournal {
   function markComplete(uint id, string memory _reason) taskExists(id) taskIsIncomplete(id) public {
     tasks[id].complete = true;
     emit TaskCompleted(id, _reason);
+  }
+
+  function sumFeeTotal() public view returns(uint) {
+    uint total = 0;
+    for (uint i = 0; i < taskIdCtr; i++) {
+      total = total + tasks[i].fee;
+    }
+    return total;
+  }
+
+  function sumFeeCompleted() public view returns (uint) {
+    uint total = 0;
+    for (uint i = 0; i < taskIdCtr; i++) {
+      total = tasks[i].complete == true ? total + tasks[i].fee : total;
+    }
+    return total;
+  }
+
+  function isPaid() public view returns (bool) {
+    return false;
   }
 
   modifier taskExists(uint id) {
