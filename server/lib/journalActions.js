@@ -219,6 +219,21 @@ const JournalActions = {
           reject({'status': 'Error', 'error': error});
         });
     });
+  },
+  completeTask: async (req, res) => {
+    let { id, reason } = req.body;
+    return new Promise((resolve, reject) => {
+      taskJournal.instance.markComplete(id, reason, {from: taskJournal.account, gas:1000000})
+        .then(() => {
+          console.log('Attempted task complete');
+          res.status(200).json({'status': 'Success'});
+        })
+        .catch((error) => {
+          console.log(`Error encountered in complete task: ${error}`)
+          res.status(400).json({'status': 'Error', 'error': error});
+          reject({'status': 'Error', 'error': error});
+        });
+    });
   }
 }
 

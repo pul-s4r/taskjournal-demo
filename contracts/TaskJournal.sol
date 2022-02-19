@@ -20,7 +20,7 @@ contract TaskJournal {
   event TaskModifiedDesc(uint id, string oldDescription, string newDescription, string reason);
   event TaskModifiedDate(uint id, uint oldDate, uint newDate, string reason);
   event TaskModifiedFee(uint id, uint oldFee, uint newFee, string reason);
-  event TaskCompleted(uint id);
+  event TaskCompleted(uint id, string reason);
 
   constructor() {
 
@@ -50,7 +50,7 @@ contract TaskJournal {
   }
 
   function getTaskCompletionStatus(uint id) taskExists(id) public view returns(bool) {
-    return tasks[id].complete; 
+    return tasks[id].complete;
   }
 
   function modifyTaskDesc(uint id, string memory _newDescription, string memory _reason) taskExists(id) public {
@@ -75,9 +75,9 @@ contract TaskJournal {
       modifyTaskDate(id, tasks[id].dateDue + _numDays * 1 days, _reason);
   }
 
-  function markComplete(uint id) taskExists(id) public {
+  function markComplete(uint id, string memory _reason) taskExists(id) public {
     tasks[id].complete = true;
-    emit TaskCompleted(id);
+    emit TaskCompleted(id, _reason);
   }
 
   modifier taskExists(uint id) {
