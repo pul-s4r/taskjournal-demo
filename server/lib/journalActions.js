@@ -1,10 +1,11 @@
 import JournalState from './journalState.js';
 import fetch from "node-fetch";
 import axios from 'axios';
+import { readFile } from 'fs/promises';
 
-const config = {
-  ethereumUrl: 'http://localhost:9545',
-};
+const config = JSON.parse(
+  await readFile(new URL('../appconfig.json', import.meta.url))
+);
 const bpeBaseUrl = 'http://localhost:8080/engine-rest';
 const bpeProcessName = 'ApproveClaim';
 const bpeEndpoint = `/process-definition/key/${bpeProcessName}/start`;
