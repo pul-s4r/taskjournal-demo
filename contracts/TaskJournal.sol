@@ -111,9 +111,21 @@ contract TaskJournal is PayableBasic {
     return true;
   }
 
-  function markFinalised() contractNotFinalised public {
+  function markFinalised() contractNotFinalised onlyOwner public {
     finalised = true;
     emit ContractFinalised();
+  }
+
+  function deposit() override public payable contractFinalised {
+    super.deposit();
+  }
+
+  function withdraw() override public contractFinalised {
+    super.withdraw();
+  }
+
+  function transfer(uint _amount) override addressIsValid(payee) onlyOwner contractFinalised public {
+    super.transfer(_amount);
   }
 
   modifier taskExists(uint id) {
@@ -132,6 +144,13 @@ contract TaskJournal is PayableBasic {
 
   modifier contractNotFinalised() {
     if (finalised) {
+      revert();
+    }
+    _;
+  }
+
+  modifier contractFinalised() {
+    if (!finalised) {
       revert();
     }
     _;

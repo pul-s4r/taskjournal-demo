@@ -25,22 +25,22 @@ contract PayableBasic {
       owner = _from;
     }
 
-    function deposit() public payable {}
+    function deposit() public virtual payable {}
 
-    function withdraw() public {
+    function withdraw() public virtual {
         uint amount = address(this).balance;
 
         (bool success, ) = owner.call{value: amount}("");
         require(success, "Failed to send Ether");
     }
 
-    function transferToAddress(address payable _to, uint _amount) addressIsValid(_to) public {
+    function transferToAddress(address payable _to, uint _amount) addressIsValid(_to) public virtual {
         (bool success, ) = _to.call{value: _amount}("");
         require(success, "Failed to send Ether");
         emit Transfer(owner, _to, _amount);
     }
 
-    function transfer(uint _amount) addressIsValid(payee) onlyOwner public {
+    function transfer(uint _amount) addressIsValid(payee) onlyOwner public virtual {
       transferToAddress(payee, _amount);
     }
 
