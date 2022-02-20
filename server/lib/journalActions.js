@@ -215,7 +215,7 @@ const JournalActions = {
           resolve({'status': 'Success'});
         })
         .catch((error) => {
-          console.log(`Error encountered in delay task: ${error}`)
+          console.log(`Error encountered in delay task: ${error}`);
           res.status(400).json({'status': 'Error', 'error': error});
           reject({'status': 'Error', 'error': error});
         });
@@ -231,12 +231,79 @@ const JournalActions = {
           resolve({'status': 'Success'});
         })
         .catch((error) => {
-          console.log(`Error encountered in complete task: ${error}`)
+          console.log(`Error encountered in complete task: ${error}`);
           res.status(400).json({'status': 'Error', 'error': error});
           resolve({'status': 'Error', 'error': error});
         });
     });
-  }
+  },
+  getContractBalance: async (req, res) => {
+    return new Promise((resolve, reject) => {
+      taskJournal.instance.getBalance()
+        .then((data) => {
+          console.log('Get contract balance: success');
+          res.status(200).json({'status': 'Success', 'payload': data});
+          resolve({'status': 'Success', 'payload': data});
+        })
+        .catch((error) => {
+          console.log(`Error encountered in get balance: ${error}`);
+          res.status(400).json({'status': 'Error', 'error': error});
+          resolve({'status': 'Error', 'error': error});
+        });
+    });
+  },
+  finaliseContract: async (req, res) => {
+    return new Promise((resolve, reject) => {
+      taskJournal.instance.markFinalised()
+      .then(() => {
+        console.log('Attempted finalise contract: success');
+        res.status(200).json({'status': 'Success'});
+        resolve({'status': 'Success'});
+      }).catch((error) => {
+        console.log(`Error encountered in finalise contract: ${error}`)
+        res.status(400).json({'status': 'Error', 'error': error});
+        resolve({'status': 'Error', 'error': error});
+      });
+    });
+  },
+  getOwnerAccount: async (req, res) => {
+    return taskJournal.ownerAccount;
+  },
+  getContractorAccount: async (req, res) => {
+    return taskJournal.contractorAccount;
+  },
+  makePaymentFromOwner: async (req, res) => {
+    const { value } = req.body;
+    return new Promise((resolve, reject) => {
+      taskJournal.instance.deposit().transact({
+        'to': taskJournal.address,
+        'from': taskJournal.getOwnerAccount(),
+        'value': value
+      }).then(() => {
+        console.log('Attempted payment (owner): success');
+        res.status(200).json({'status': 'Success'});
+        resolve({'status': 'Success'});
+      }).catch((error) => {
+        console.log(`Error encountered in payment (owner): ${error}`)
+        res.status(400).json({'status': 'Error', 'error': error});
+        resolve({'status': 'Error', 'error': error});
+      });
+    });
+  },
+  transferPaymentToContractor: async (req, res) => {
+    const { amount } = req.body;
+    return new Promise((resolve, reject) => {
+      taskJournal.instance.transfer(amount).then(() => {
+        console.log('Attempted transfer (contractor): success');
+        res.status(200).json({'status': 'Success'});
+        resolve({'status': 'Success'});
+      }).catch((error) => {
+        console.log(`Error encountered in transfer (contractor): ${error}`)
+        res.status(400).json({'status': 'Error', 'error': error});
+        resolve({'status': 'Error', 'error': error});
+      });
+    });
+  },
 }
 
 export default JournalActions;
