@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Form, Button, Badge } from 'react-bootstrap';
 import TaskAPI from '../api/taskAPI.js';
+import { PaymentDataContext, PaymentDataDispatchContext } from '../contexts/PaymentDataContext.js';
 
 const TaskPayForm = (props) => {
+  const paymentData = useContext(PaymentDataContext);
+  const setPaymentData = useContext(PaymentDataDispatchContext);
+
   const [formData, setFormData] = useState({
-    name: "",
-    desc: "",
-    due:  "",
+    amount: "",
+    address:  "",
   });
   const [displayOptions, setDisplayOptions] = useState({
     status: "Pending",
@@ -32,7 +35,7 @@ const TaskPayForm = (props) => {
             </Form.Label>
           </Col>
           <Col sm={8} md={8} className="text-center">
-            Total Payable
+            {paymentData.amountPayable}
           </Col>
         </Form.Group>
         <Form.Group className="row form_elem_p mb-3 align-items-center">
@@ -45,8 +48,8 @@ const TaskPayForm = (props) => {
             <Form.Control
               id="inputTaskAmount"
               placeholder="Amount"
-              value={formData.desc}
-              onChange={(e) => setFormData({...formData, desc: e.target.value})}
+              value={formData.amount}
+              onChange={(e) => setFormData({...formData, amount: e.target.value})}
             />
           </Col>
         </Form.Group>
@@ -62,7 +65,7 @@ const TaskPayForm = (props) => {
               placeholder="Address"
               type="string"
               value={formData.fee}
-              onChange={(e) => setFormData({...formData, fee: e.target.value})}
+              onChange={(e) => setFormData({...formData, address: e.target.value})}
             />
           </Col>
         </Form.Group>

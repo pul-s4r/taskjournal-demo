@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Form, Button, Badge } from 'react-bootstrap';
 import TaskAPI from '../api/taskAPI.js';
+import { PaymentDataContext, PaymentDataDispatchContext } from '../contexts/PaymentDataContext.js';
 
 const TaskPayStatus = (props) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    desc: "",
-    due:  "",
-  });
+  const paymentData = useContext(PaymentDataContext);
+  const setPaymentData = useContext(PaymentDataDispatchContext);
+
   const [displayOptions, setDisplayOptions] = useState({
     status: "Pending",
   });
 
   const handleFormSubmit = () => {
-
+    
   };
 
   const handleFormClear = () => {
@@ -28,11 +27,21 @@ const TaskPayStatus = (props) => {
         <Form.Group className="row form_elem_p mb-3 align-items-center">
           <Col sm={4}>
             <Form.Label>
+              Contract is Finalised
+            </Form.Label>
+          </Col>
+          <Col sm={8} md={8} className="text-center">
+            {paymentData.finalised}
+          </Col>
+        </Form.Group>
+        <Form.Group className="row form_elem_p mb-3 align-items-center">
+          <Col sm={4}>
+            <Form.Label>
               Amount Payable
             </Form.Label>
           </Col>
           <Col sm={8} md={8} className="text-center">
-            Total Payable
+            {paymentData.amountPayable}
           </Col>
         </Form.Group>
         <Form.Group className="row form_elem_p mb-3 align-items-center">
@@ -42,7 +51,7 @@ const TaskPayStatus = (props) => {
             </Form.Label>
           </Col>
           <Col sm={8} md={8} className="text-center">
-            Yes/No
+            {paymentData.paidToContract ? "Yes" : "No"}
           </Col>
         </Form.Group>
         <Form.Group className="row form_elem_p mb-3 align-items-center">
@@ -52,7 +61,7 @@ const TaskPayStatus = (props) => {
             </Form.Label>
           </Col>
           <Col sm={8} md={8} className="text-center">
-            Yes/No
+            {paymentData.released ? "Yes" : "No"}
           </Col>
         </Form.Group>
         <Row>
