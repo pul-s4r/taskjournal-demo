@@ -25,17 +25,17 @@ class JournalState {
     this.network = this.networks[this.networks.length - 1];
     this.address = artifact.networks[this.network].address;
 
-    // this.account = async () => {
-    //   var account = await AccountActions.getAccount(this.web3);
-    //   return account;
-    // };
-    // this.account = AccountActions.getAccount(this.web3);
-    // this.instance = this.contractdef.at(this.address);
+    const contractorAccPromise = new Promise((resolve, reject) => {
+      AccountActions.getAccountIndexed(this.web3, 1).then((account) => {
+        this.contractorAccount = account;
+        resolve(this.contractorAccount);
+      });
+    });
 
     return new Promise((resolve, reject) => {
       AccountActions.getAccount(this.web3)
         .then((account) => {
-          this.account = account;
+          this.ownerAccount = account;
           return this.contractdef.at(this.address);
         })
         .then((instance) => {
@@ -48,22 +48,13 @@ class JournalState {
     });
   }
 
-  // getTasks() {
-  //   var tasks = await JournalActions.getTasks();
-  //   return tasks;
-  // }
-  //
-  // createTask(name, desc, due) {
-  //   await JournalActions.createTask(name, desc, due);
-  // }
-  //
-  // modifyTaskDesc() {
-  //   await JournalActions.modifyTaskDesc
-  // }
-  //
-  // delayTask() {
-  //
-  // }
+  getOwnerAccount() {
+    return this.ownerAccount;
+  }
+
+  getContractorAccount() {
+    return this.contractorAccount;
+  }
 }
 
 export default JournalState;

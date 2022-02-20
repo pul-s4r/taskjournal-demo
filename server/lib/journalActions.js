@@ -30,7 +30,7 @@ taskJournal.setup()
   .then(() => {
     console.log('Successfully initialised contract state');
     console.log('at address: ', taskJournal.address);
-    console.log('using account: ', taskJournal.account);
+    console.log('using account: ', taskJournal.ownerAccount);
   })
   .catch((error) => {
     console.error(`Error initialising contract state: ${error}`);
@@ -82,7 +82,7 @@ const JournalActions = {
     let { name, desc, due, fee } = req.body;
     due = new Date(due);
     return new Promise((resolve, reject) => {
-      taskJournal.instance.createTask(name, desc, Math.floor(due.getTime()/1000), Number(fee), {from: taskJournal.account, gas:1000000})
+      taskJournal.instance.createTask(name, desc, Math.floor(due.getTime()/1000), Number(fee), {from: taskJournal.ownerAccount, gas:1000000})
         .then(() => {
           console.log('Attempted task create: success');
           res.status(200).json({'status': 'Success'});
@@ -96,7 +96,7 @@ const JournalActions = {
   modifyTaskDesc: async (req, res) => {
     let { id, desc, reason } = req.body;
     return new Promise((resolve, reject) => {
-      taskJournal.instance.modifyTaskDesc(Number(id), desc, reason, {from: taskJournal.account, gas:1000000})
+      taskJournal.instance.modifyTaskDesc(Number(id), desc, reason, {from: taskJournal.ownerAccount, gas:1000000})
         .then(() => {
           console.log('Attempted task modify: success');
           res.status(200).json({'status': 'Success'});
@@ -199,7 +199,7 @@ const JournalActions = {
   delayTask: async (req, res) => {
     let { id, numDays, reason } = req.body;
     return new Promise((resolve, reject) => {
-      taskJournal.instance.delayTaskByDays(Number(id), Number(numDays), reason, {from: taskJournal.account, gas:1000000})
+      taskJournal.instance.delayTaskByDays(Number(id), Number(numDays), reason, {from: taskJournal.ownerAccount, gas:1000000})
         .then((txObject) => {
           console.log(txObject);
           var transactionReceipt = taskJournal.web3.eth.getTransactionReceipt(txObject.tx)
@@ -224,7 +224,7 @@ const JournalActions = {
   completeTask: async (req, res) => {
     let { id, reason } = req.body;
     return new Promise((resolve, reject) => {
-      taskJournal.instance.markComplete(Number(id), reason, {from: taskJournal.account, gas:1000000})
+      taskJournal.instance.markComplete(Number(id), reason, {from: taskJournal.ownerAccount, gas:1000000})
         .then(() => {
           console.log('Attempted task complete: success');
           res.status(200).json({'status': 'Success'});
