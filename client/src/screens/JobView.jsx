@@ -8,6 +8,7 @@ import TaskPayForm from '../components/TaskPayForm.jsx';
 import TaskAddForm from '../components/TaskAddForm.jsx';
 
 import { TaskDataProvider } from '../contexts/TaskDataContext.js';
+import { PaymentDataProvider } from '../contexts/PaymentDataContext';
 
 const JobView = (props) => {
   const [title, setTitle] = React.useState("Home");
@@ -23,7 +24,9 @@ const JobView = (props) => {
               <TaskAddForm />
             </Col>
             <Col>
-              <TaskPayForm />
+              <PaymentDataProvider>
+                <TaskPayForm />
+              </PaymentDataProvider>
             </Col>
           </Row>
       </TaskDataProvider>

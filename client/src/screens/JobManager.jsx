@@ -9,6 +9,7 @@ import TaskCompleteForm from '../components/TaskCompleteForm.jsx';
 import TaskPayStatus from '../components/TaskPayStatus.jsx';
 
 import { TaskDataProvider } from '../contexts/TaskDataContext.js';
+import { PaymentDataProvider } from '../contexts/PaymentDataContext';
 
 const JobManager = (props) => {
   const [title, setTitle] = React.useState("Home");
@@ -29,7 +30,9 @@ const JobManager = (props) => {
         </Row>
         <Row>
           <Col>
-            <TaskPayStatus />
+            <PaymentDataProvider>
+              <TaskPayStatus />
+            </PaymentDataProvider>
           </Col>
           <Col>
           </Col>
