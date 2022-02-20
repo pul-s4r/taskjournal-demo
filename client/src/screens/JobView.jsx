@@ -5,6 +5,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Header from '../components/Header.jsx';
 import TaskTable from '../components/TaskTable.jsx';
 import TaskPayForm from '../components/TaskPayForm.jsx';
+import TaskAddForm from '../components/TaskAddForm.jsx';
 
 import { TaskDataProvider } from '../contexts/TaskDataContext.js';
 
@@ -15,12 +16,13 @@ const JobView = (props) => {
     <Container>
       <Header/>
       <TaskDataProvider>
-        <TaskTable isEditable={false}/>
+        <TaskTable isManager={true}/>
           <Row>
             <Col>
-              <TaskPayForm />
+              <TaskAddForm />
             </Col>
             <Col>
+              <TaskPayForm />
             </Col>
           </Row>
       </TaskDataProvider>

@@ -4,7 +4,6 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import Header from '../components/Header.jsx';
 import TaskTable from '../components/TaskTable.jsx';
-import TaskAddForm from '../components/TaskAddForm.jsx';
 import TaskEditForm from '../components/TaskEditForm.jsx';
 import TaskCompleteForm from '../components/TaskCompleteForm.jsx';
 
@@ -18,16 +17,15 @@ const JobManager = (props) => {
       <Header/>
       <h1>Contractor View</h1>
       <TaskDataProvider>
-        <TaskTable isEditable={true}/>
+        <TaskTable isManager={false}/>
         <Row>
-          <Col>
-            <TaskAddForm />
-          </Col>
           <Col>
             <TaskCompleteForm />
           </Col>
+          <Col>
+            <TaskEditForm />
+          </Col>
         </Row>
-        <TaskEditForm />
       </TaskDataProvider>
     </Container>
   );

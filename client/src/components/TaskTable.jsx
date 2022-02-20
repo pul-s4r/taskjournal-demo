@@ -7,7 +7,7 @@ import { TaskDataContext, TaskDataDispatchContext } from '../contexts/TaskDataCo
 
 const TaskTable = (props) => {
   // const [taskData, setTaskData] = useState([]);
-  const { isEditable } = props;
+  const { isManager } = props;
 
   const taskData = useContext(TaskDataContext);
   const setTaskData = useContext(TaskDataDispatchContext);
@@ -94,7 +94,7 @@ const TaskTable = (props) => {
                   <th>{formatDate(Number(`0x${task['4']}`))}</th>
                   <th>{Number(`0x${task['5']}`)}</th>
                   <th>{task['6'] === true ? "Yes" : "No"}</th>
-                  {isEditable ? (
+                  {isManager ? (
                     <th>
                       <Button variant="outline-danger">
                         Delete

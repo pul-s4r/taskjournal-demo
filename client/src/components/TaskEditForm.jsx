@@ -40,12 +40,12 @@ const TaskEditForm = (props) => {
         <h1>Delay Job</h1>
       </Row>
         <Form.Group className="row form_elem_p mb-3 align-items-center">
-          <Col sm={2}>
+          <Col sm={4}>
             <Form.Label>
               Task ID
             </Form.Label>
           </Col>
-          <Col sm={4} md={4}>
+          <Col sm={8} md={8}>
             <Form.Select
               id="selectTask"
               placeholder="Task ID"
@@ -64,12 +64,12 @@ const TaskEditForm = (props) => {
           </Col>
         </Form.Group>
         <Form.Group className="row form_elem_p mb-3 align-items-center">
-          <Col sm={2}>
+          <Col >
             <Form.Label>
               Delay Period (Days)
             </Form.Label>
           </Col>
-          <Col sm={4} md={4}>
+          <Col sm={8} md={8}>
             <Form.Control
               id="inputDelayDuration"
               placeholder="# Days"
@@ -80,12 +80,12 @@ const TaskEditForm = (props) => {
           </Col>
         </Form.Group>
         <Form.Group className="row form_elem_p mb-3 align-items-center">
-          <Col sm={2}>
+          <Col >
             <Form.Label>
               Reason for Change
             </Form.Label>
           </Col>
-          <Col sm={4} md={4}>
+          <Col sm={8} md={8}>
             <Form.Control
               id="inputReason"
               placeholder="Description"
@@ -95,9 +95,9 @@ const TaskEditForm = (props) => {
           </Col>
         </Form.Group>
         <Row>
-          <Col sm={2}>
+          <Col sm={4}>
           </Col>
-          <Col sm={1}>
+          <Col sm={2}>
             <Button
               variant="primary"
               onClick={() => handleFormSubmit()}
@@ -105,7 +105,7 @@ const TaskEditForm = (props) => {
               Submit
             </Button>
           </Col>
-          <Col sm={1}>
+          <Col sm={2}>
             <Button
               variant="danger"
               onClick={() => handleFormClear()}
@@ -113,7 +113,7 @@ const TaskEditForm = (props) => {
               Clear
             </Button>
           </Col>
-          <Col sm={1}>
+          <Col sm={2}>
             <Badge bg={(displayOptions.status === "Success" ? "success" : displayOptions.status === "Error" ? "danger" : displayOptions.status === "Sent" ? "info" : "secondary")}>{displayOptions.status}</Badge>
           </Col>
         </Row>
