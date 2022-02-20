@@ -6,6 +6,7 @@ import Header from '../components/Header.jsx';
 import TaskTable from '../components/TaskTable.jsx';
 import TaskEditForm from '../components/TaskEditForm.jsx';
 import TaskCompleteForm from '../components/TaskCompleteForm.jsx';
+import TaskPayStatus from '../components/TaskPayStatus.jsx';
 
 import { TaskDataProvider } from '../contexts/TaskDataContext.js';
 
@@ -24,6 +25,13 @@ const JobManager = (props) => {
           </Col>
           <Col>
             <TaskEditForm />
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <TaskPayStatus />
+          </Col>
+          <Col>
           </Col>
         </Row>
       </TaskDataProvider>
