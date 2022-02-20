@@ -3,8 +3,9 @@ import { Navbar, Nav, NavDropdown, Button } from "react-bootstrap";
 import { Container, Row, Col } from 'react-bootstrap';
 
 const publicNavBarLinks = [
-  { href: "/", name: "Job List" },
-  { href: "/owner", name: "Job View" },
+  { href: "/", name: "Home" },
+  { href: "/owner", name: "Owner View" },
+  { href: "/contractor", name: "Contractor View" },
 ];
 
 const Header = (props) => {

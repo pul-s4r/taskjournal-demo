@@ -4,31 +4,21 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import Header from '../components/Header.jsx';
 import TaskTable from '../components/TaskTable.jsx';
-import TaskPayForm from '../components/TaskPayForm.jsx';
-import TaskAddForm from '../components/TaskAddForm.jsx';
 
 import { TaskDataProvider } from '../contexts/TaskDataContext.js';
 
-const JobView = (props) => {
+const HomeScreen = (props) => {
   const [title, setTitle] = React.useState("Home");
 
   return (
     <Container>
       <Header/>
-      <h1>Owner View</h1>
+      <h1>Home</h1>
       <TaskDataProvider>
-        <TaskTable isManager={true}/>
-          <Row>
-            <Col>
-              <TaskAddForm />
-            </Col>
-            <Col>
-              <TaskPayForm />
-            </Col>
-          </Row>
+        <TaskTable isManager={false}/>
       </TaskDataProvider>
     </Container>
   );
 };
 
-export default JobView;
+export default HomeScreen;
