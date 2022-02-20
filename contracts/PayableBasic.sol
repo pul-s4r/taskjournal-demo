@@ -13,8 +13,16 @@ contract PayableBasic {
         owner = payable(msg.sender);
     }
 
+    function getBalance() view public returns (uint) {
+      return address(this).balance;
+    }
+
     function setPayee(address payable _from) public {
       payee = _from;
+    }
+
+    function setOwner(address payable _from) public {
+      owner = _from;
     }
 
     function deposit() public payable {}
@@ -29,10 +37,10 @@ contract PayableBasic {
     function transferToAddress(address payable _to, uint _amount) addressIsValid(_to) public {
         (bool success, ) = _to.call{value: _amount}("");
         require(success, "Failed to send Ether");
-        emit Transfer(owner, _to, _amount); 
+        emit Transfer(owner, _to, _amount);
     }
 
-    function transfer(uint _amount) addressIsValid(payee) public {
+    function transfer(uint _amount) addressIsValid(payee) onlyOwner public {
       transferToAddress(payee, _amount);
     }
 
@@ -40,6 +48,11 @@ contract PayableBasic {
       if (_to != address(_to)) {
         revert();
       }
+      _;
+    }
+
+    modifier onlyOwner() {
+      require(msg.sender == owner, 'Not owner');
       _;
     }
 }
