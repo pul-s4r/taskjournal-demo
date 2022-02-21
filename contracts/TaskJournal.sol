@@ -110,6 +110,10 @@ contract TaskJournal is PayableBasic {
     }
     return true;
   }
+  
+  function isFinalised() public view returns (bool) {
+    return finalised; 
+  }
 
   function markFinalised() contractNotFinalised onlyOwner public {
     finalised = true;
