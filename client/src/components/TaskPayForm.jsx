@@ -13,7 +13,8 @@ const TaskPayForm = (props) => {
   });
   const [displayOptions, setDisplayOptions] = useState({
     status: "Pending",
-    balance: 'N/A',
+    ownerBalance: 'N/A',
+    contractBalance: 'N/A'
   });
 
   const handleButtonFinalise = () => {
@@ -33,15 +34,18 @@ const TaskPayForm = (props) => {
     console.log("Refresh called");
     Promise.all([
       TaskAPI.isFinalised().then(data => data.payload), TaskAPI.getAmountPayable().then(data => data.payload),
-      TaskAPI.getOwnerAccountBalance().then(data => data.payload)
+      TaskAPI.getOwnerAccountBalance().then(data => data.payload),
+      TaskAPI.getContractBalance().then(data => data.payload)
     ])
       .then((values) => {
+        console.log("ContractBalance: ", values[3]);
           setPaymentData(
           {... paymentData,
             finalised: values[0],
             amountPayable: values[1]
           });
-          setDisplayOptions({...displayOptions, balance: values[2]});
+          setDisplayOptions({...displayOptions, ownerBalance: values[2], contractBalance: values[3]});
+
         }
       );
   };
@@ -84,11 +88,19 @@ const TaskPayForm = (props) => {
         <Form.Group className="row form_elem_p mb-3 align-items-center">
           <Col sm={4}>
             <Form.Label>
+              Contract Balance
+            </Form.Label>
+          </Col>
+          <Col sm={8} md={8} className="text-center">
+            {Number(displayOptions.contractBalance).toFixed(5)}
+          </Col>
+          <Col sm={4}>
+            <Form.Label>
               Owner Account Balance
             </Form.Label>
           </Col>
           <Col sm={8} md={8} className="text-center">
-            {Number(displayOptions.balance).toFixed(5)}
+            {Number(displayOptions.ownerBalance).toFixed(5)}
           </Col>
           <Col sm={4}>
             <Form.Label>
