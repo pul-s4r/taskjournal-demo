@@ -108,16 +108,18 @@ const PaymentActions = {
   makePaymentFromOwner: async (req, res) => {
     const { value } = req.body;
     return new Promise((resolve, reject) => {
-      isFinalised
+      console.log("Paying");
+      taskJournal.instance.isFinalised()
       .then((data) => {
         var result = {};
-        if (data.finalised === true) {
-          result = taskJournal.instance.deposit().transact({
+        console.log("Finalised: ", data);
+        if (data === true) {
+          result = taskJournal.instance.deposit({
             'to': taskJournal.address,
             'from': taskJournal.getOwnerAccount(),
-            'value': value
+            'value': Number(value)
           })
-          .then(() => ({'status': 'Success'}));
+          .then(() => { return {'status': 'Success'}; });
           console.log("Result: ", result);
         } else {
           result = {'status': 'Failure', 'reason': 'Not finalised yet'};
