@@ -24,6 +24,9 @@ router.post('/delayOutcome', JournalActions.delayTaskOutcome);
 router.post('/complete', JournalActions.completeTask);
 router.post('/finalise', JournalActions.finaliseContract);
 
+router.get('/ownerBalance', PaymentActions.getOwnerAccountBalance);
+router.get('/contractorBalance', PaymentActions.getContractorAccountBalance);
+router.get('/smcBalance', PaymentActions.getContractBalance);
 router.get('/getAmountPayable', PaymentActions.getAmountPayable);
 router.get('/isPaid', PaymentActions.isPaid);
 router.get('/isReleased', PaymentActions.isReleased);
