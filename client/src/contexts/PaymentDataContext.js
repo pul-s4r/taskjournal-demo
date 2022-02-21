@@ -5,7 +5,7 @@ const PaymentDataDispatchContext = createContext(undefined);
 
 const PaymentDataProvider = ({ children }) => {
   const [paymentData, setPaymentData] = useState({
-    finalised: false, 
+    finalised: false,
     amountPayable: 0,
     paidToContract: false,
     released: false,

@@ -15,8 +15,25 @@ const TaskPayForm = (props) => {
     status: "Pending",
   });
 
-  const handleFormSubmit = () => {
+  const handleButtonFinalise = () => {
+    TaskAPI.finalise().then((data) => {
+    });
+  };
 
+  const handleFormSubmit = () => {
+    // Pay code
+  };
+
+  const handleFormRefresh = () => {
+    Promise.all([
+      TaskAPI.isFinalised().then(data => data.payload), TaskAPI.getAmountPayable().then(data => data.payload)]
+    )
+      .then((values) => setPaymentData(
+        {... paymentData,
+          finalised: values[0],
+          amountPayable: values[1]
+        })
+      );
   };
 
   const handleFormClear = () => {
@@ -28,6 +45,42 @@ const TaskPayForm = (props) => {
       <Row>
         <h1>Pay Contract</h1>
       </Row>
+      <Row className="mb-3">
+        <Col sm={4}>
+        </Col>
+        <Col>
+        </Col>
+      </Row>
+      <Row className="mb-3">
+        <Col sm={4}>
+        </Col>
+        <Col>
+          <Button
+            variant="primary"
+            onClick={() => handleFormRefresh()}
+          >
+            Refresh
+          </Button>
+        </Col>
+        <Col>
+          <Button
+            variant="primary"
+            onClick={() => handleButtonFinalise()}
+          >
+            Finalise
+          </Button>
+        </Col>
+      </Row>
+        <Form.Group className="row form_elem_p mb-3 align-items-center">
+          <Col sm={4}>
+            <Form.Label>
+              Contract is Finalised
+            </Form.Label>
+          </Col>
+          <Col sm={8} md={8} className="text-center">
+            {paymentData.finalised ? "Yes" : "No"}
+          </Col>
+        </Form.Group>
         <Form.Group className="row form_elem_p mb-3 align-items-center">
           <Col sm={4}>
             <Form.Label>
@@ -35,7 +88,7 @@ const TaskPayForm = (props) => {
             </Form.Label>
           </Col>
           <Col sm={8} md={8} className="text-center">
-            {paymentData.amountPayable}
+            {Number(`0x${paymentData.amountPayable}`)}
           </Col>
         </Form.Group>
         <Form.Group className="row form_elem_p mb-3 align-items-center">
@@ -77,7 +130,7 @@ const TaskPayForm = (props) => {
               variant="primary"
               onClick={() => handleFormSubmit()}
             >
-              Add
+              Pay
             </Button>
           </Col>
           <Col sm={2}>

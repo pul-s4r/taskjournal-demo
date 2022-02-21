@@ -12,18 +12,19 @@ const TaskPayStatus = (props) => {
   });
 
   const handleFormSubmit = () => {
-    TaskAPI.isFinalised().then((data) => {
-      setPaymentData({... paymentData, finalised: data.payload});
-    });
-    TaskAPI.getAmountPayable().then((data) => {
-      setPaymentData({... paymentData, amountPayable: data.payload});
-    });
-    TaskAPI.isPaid().then((data) => {
-      setPaymentData({... paymentData, paidToContract: data.payload});
-    });
-    TaskAPI.isReleased().then((data) => {
-      setPaymentData({... paymentData, released: data.payload});
-    });
+    Promise.all([
+      TaskAPI.isFinalised().then(data => data.payload), TaskAPI.getAmountPayable().then(data => data.payload),
+      TaskAPI.isPaid().then(data => data.payload),
+      TaskAPI.isReleased().then(data => data.payload)
+    ])
+      .then((values) => setPaymentData(
+        {... paymentData,
+          finalised: values[0],
+          amountPayable: values[1],
+          paidToContract: values[2],
+          released: values[3]
+        })
+      );
 
   };
 
@@ -53,7 +54,7 @@ const TaskPayStatus = (props) => {
             </Form.Label>
           </Col>
           <Col sm={8} md={8} className="text-center">
-            {paymentData.amountPayable.toString()}
+            {Number(`0x${paymentData.amountPayable}`)}
           </Col>
         </Form.Group>
         <Form.Group className="row form_elem_p mb-3 align-items-center">
