@@ -125,6 +125,66 @@ const TaskAPI = {
       });
     return result;
   },
+  isFinalised: () => {
+    var result = fetch(`${serverurl}${"/isFinalised"}`).then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        console.log(`Error in call to completeTask: ${res.json()}`);
+        return res.json();
+      }
+    })
+    .catch((error) => {
+      console.warn(`API_ERROR: ${error}`);
+      return {'status': 'Error', 'error': error};
+    });
+    return result;
+  },
+  getAmountPayable: () => {
+    var result = fetch(`${serverurl}${"/getAmountPayable"}`).then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        console.log(`Error in call to completeTask: ${res.json()}`);
+        return res.json();
+      }
+    })
+    .catch((error) => {
+      console.warn(`API_ERROR: ${error}`);
+      return {'status': 'Error', 'error': error};
+    });
+    return result;
+  },
+  isPaid: () => {
+    var result = fetch(`${serverurl}${"/isPaid"}`).then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        console.log(`Error in call to completeTask: ${res.json()}`);
+        return res.json();
+      }
+    })
+    .catch((error) => {
+      console.warn(`API_ERROR: ${error}`);
+      return {'status': 'Error', 'error': error};
+    });
+    return result;
+  },
+  isReleased: () => {
+    var result = fetch(`${serverurl}${"/isReleased"}`).then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        console.log(`Error in call to completeTask: ${res.json()}`);
+        return res.json();
+      }
+    })
+    .catch((error) => {
+      console.warn(`API_ERROR: ${error}`);
+      return {'status': 'Error', 'error': error};
+    });
+    return result;
+  },
 
 };
 
