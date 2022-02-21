@@ -128,7 +128,7 @@ const JournalActions = {
         return Promise.resolve(data);
       }).catch((error) => {
         console.log(`Error requesting delaying task: ${error}`);
-        res.status(400).json({'status': 'Failure', 'error': error});
+        res.status(400).json({'status': 'Error', 'error': error});
         return Promise.reject(error);
       });
 
@@ -254,7 +254,7 @@ const JournalActions = {
     return new Promise((resolve, reject) => {
       taskJournal.instance.isFinalised()
       .then((data) => {
-        res.status(200).json({'status': 'Success'});
+        res.status(200).json({'status': 'Success', 'payload': data});
         resolve({'status': 'Success', 'payload': data});
       }).catch((error) => {
         console.log(`Error encountered in isFinalised: ${error}`)
