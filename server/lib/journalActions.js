@@ -1,11 +1,7 @@
-import JournalState from './journalState.js';
-import fetch from "node-fetch";
 import axios from 'axios';
-import { readFile } from 'fs/promises';
 
-const config = JSON.parse(
-  await readFile(new URL('../appconfig.json', import.meta.url))
-);
+import taskJournal from './journalStateInstance.js';
+
 const bpeBaseUrl = 'http://localhost:8080/engine-rest';
 const bpeProcessName = 'ApproveClaim';
 const bpeEndpoint = `/process-definition/key/${bpeProcessName}/start`;
@@ -24,18 +20,6 @@ const delayTaskActionStateDefault = {
 
 var delayTaskActionState = {};
 // ... {[id]: {numDays: 2, reason: "Something"}}
-
-var taskJournal = new JournalState(config);
-taskJournal.setup()
-  .then(() => {
-    console.log('Successfully initialised contract state');
-    console.log('at address: ', taskJournal.address);
-    console.log('using account: ', taskJournal.ownerAccount);
-  })
-  .catch((error) => {
-    console.error(`Error initialising contract state: ${error}`);
-  })
-;
 
 const JournalActions = {
   // rewrite to accept taskjournal
@@ -266,39 +250,14 @@ const JournalActions = {
       });
     });
   },
-  getOwnerAccount: async (req, res) => {
-    return taskJournal.ownerAccount;
-  },
-  getContractorAccount: async (req, res) => {
-    return taskJournal.contractorAccount;
-  },
-  makePaymentFromOwner: async (req, res) => {
-    const { value } = req.body;
+  isFinalised: async (req, res) => {
     return new Promise((resolve, reject) => {
-      taskJournal.instance.deposit().transact({
-        'to': taskJournal.address,
-        'from': taskJournal.getOwnerAccount(),
-        'value': value
-      }).then(() => {
-        console.log('Attempted payment (owner): success');
+      taskJournal.instance.isFinalised()
+      .then((data) => {
         res.status(200).json({'status': 'Success'});
-        resolve({'status': 'Success'});
+        resolve({'status': 'Success', 'payload': data});
       }).catch((error) => {
-        console.log(`Error encountered in payment (owner): ${error}`)
-        res.status(400).json({'status': 'Error', 'error': error});
-        resolve({'status': 'Error', 'error': error});
-      });
-    });
-  },
-  transferPaymentToContractor: async (req, res) => {
-    const { amount } = req.body;
-    return new Promise((resolve, reject) => {
-      taskJournal.instance.transfer(amount).then(() => {
-        console.log('Attempted transfer (contractor): success');
-        res.status(200).json({'status': 'Success'});
-        resolve({'status': 'Success'});
-      }).catch((error) => {
-        console.log(`Error encountered in transfer (contractor): ${error}`)
+        console.log(`Error encountered in isFinalised: ${error}`)
         res.status(400).json({'status': 'Error', 'error': error});
         resolve({'status': 'Error', 'error': error});
       });
