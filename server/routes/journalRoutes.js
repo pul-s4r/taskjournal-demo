@@ -32,6 +32,6 @@ router.get('/isPaid', PaymentActions.isPaid);
 router.get('/isReleased', PaymentActions.isReleased);
 
 router.post('/payContract', PaymentActions.makePaymentFromOwner);
-router.post('releaseFunds', PaymentActions.transferPaymentToContractor);
+router.post('/releaseFunds', PaymentActions.transferPaymentToContractor);
 
 export default router;

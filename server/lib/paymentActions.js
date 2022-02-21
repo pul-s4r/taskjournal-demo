@@ -137,12 +137,15 @@ const PaymentActions = {
   transferPaymentToContractor: async (req, res) => {
     const { amount } = req.body;
     return new Promise((resolve, reject) => {
-      taskJournal.instance.transfer(amount).then(() => {
-        console.log('Attempted transfer (contractor): success');
-        res.status(200).json({'status': 'Success'});
-        resolve({'status': 'Success'});
-      }).catch((error) => {
-        console.log(`Error encountered in transfer (contractor): ${error}`)
+      taskJournal.instance.getBalance()
+      .then((data) => {
+        var result = taskJournal.instance.transferToAddress(taskJournal.getContractorAccount(), data, {from: taskJournal.ownerAccount, gas:1000000})
+        .then(() => { return {'status': 'Success'}; });
+        res.status(200).json(result);
+        resolve(result);
+      })
+      .catch((error) => {
+        console.log(`Error encountered in transfer funds (contractor): ${error}`);
         res.status(400).json({'status': 'Error', 'error': error});
         resolve({'status': 'Error', 'error': error});
       });
