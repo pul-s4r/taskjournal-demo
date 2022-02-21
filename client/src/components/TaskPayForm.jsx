@@ -25,9 +25,9 @@ const TaskPayForm = (props) => {
   const handleFormSubmit = () => {
     // Pay code
     console.log("Amount: ", formData.amount);
-    // TaskAPI.payFromOwner(formData.amount).then((data) => {
-    //
-    // });
+    TaskAPI.payFromOwner(formData.amount).then((data) => {
+
+    });
   };
 
   const handleFormRefresh = () => {
@@ -92,7 +92,7 @@ const TaskPayForm = (props) => {
             </Form.Label>
           </Col>
           <Col sm={8} md={8} className="text-center">
-            {Number(displayOptions.contractBalance).toFixed(5)}
+            {Number(`0x${displayOptions.contractBalance}`).toFixed(5)}
           </Col>
           <Col sm={4}>
             <Form.Label>
