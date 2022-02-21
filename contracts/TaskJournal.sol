@@ -86,7 +86,7 @@ contract TaskJournal is PayableBasic {
 
   function sumFeeTotal() public view returns(uint) {
     uint total = 0;
-    for (uint i = 0; i < taskIdCtr; i++) {
+    for (uint i = 1; i <= taskIdCtr; i++) {
       total = total + tasks[i].fee;
     }
     return total;
@@ -94,7 +94,7 @@ contract TaskJournal is PayableBasic {
 
   function sumFeeCompleted() public view returns (uint) {
     uint total = 0;
-    for (uint i = 0; i < taskIdCtr; i++) {
+    for (uint i = 1; i <= taskIdCtr; i++) {
       total = tasks[i].complete == true ? total + tasks[i].fee : total;
     }
     return total;
@@ -113,7 +113,7 @@ contract TaskJournal is PayableBasic {
     for (uint i = 0; i < taskIdCtr; i++) {
       if (!tasks[i].complete) { return false; }
     }
-    return true;
+    return taskIdCtr > 0 ? true : false;
   }
   
   function isFinalised() public view returns (bool) {
@@ -149,6 +149,11 @@ contract TaskJournal is PayableBasic {
       revert();
     }
     _;
+  }
+  
+  modifier allTasksComplete(uint id) {
+    require(isComplete(), "Incomplete tasks remaining"); 
+    _; 
   }
 
   modifier contractNotFinalised() {
