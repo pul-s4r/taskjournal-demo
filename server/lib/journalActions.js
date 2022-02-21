@@ -238,7 +238,7 @@ const JournalActions = {
   },
   finaliseContract: async (req, res) => {
     return new Promise((resolve, reject) => {
-      taskJournal.instance.markFinalised()
+      taskJournal.instance.markFinalised({from: taskJournal.ownerAccount, gas:1000000})
       .then(() => {
         console.log('Attempted finalise contract: success');
         res.status(200).json({'status': 'Success'});
