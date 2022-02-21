@@ -188,7 +188,6 @@ const TaskAPI = {
   getOwnerAccountBalance: () => {
     var result = fetch(`${serverurl}${"/ownerBalance"}`).then((res) => {
       if (res.ok) {
-        console.log("Result: ", res);
         return res.json();
       } else {
         console.log(`Error in call to completeTask: ${res.json()}`);
@@ -204,7 +203,6 @@ const TaskAPI = {
   getContractorAccountBalance: () => {
     var result = fetch(`${serverurl}${"/contractorBalance"}`).then((res) => {
       if (res.ok) {
-        console.log("Result: ", res);
         return res.json();
       } else {
         console.log(`Error in call to completeTask: ${res.json()}`);
@@ -220,7 +218,6 @@ const TaskAPI = {
   getContractBalance: () => {
     var result = fetch(`${serverurl}${"/smcBalance"}`).then((res) => {
       if (res.ok) {
-        console.log("Result: ", res);
         return res.json();
       } else {
         console.log(`Error in call to completeTask: ${res.json()}`);
@@ -283,7 +280,30 @@ const TaskAPI = {
         return {'status': 'Error', 'error': error};
       });
     return result;
-  }
+  },
+  transferToContractor: () => {
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8"
+      },
+    };
+
+    var result = fetch(`${serverurl}${"/releaseFunds"}`, options)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          console.log(`Error in call to completeTask: ${res.json()}`);
+          return res.json();
+        }
+      })
+      .catch((error) => {
+        console.warn(`API_ERROR: ${error}`);
+        return {'status': 'Error', 'error': error};
+      });
+    return result;
+  },
 };
 
 export default TaskAPI;
