@@ -185,7 +185,30 @@ const TaskAPI = {
     });
     return result;
   },
+  finalise: () => {
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8"
+      },
+    };
 
+    var result = fetch(`${serverurl}${"/finalise"}`, options)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          // throw new Error(`Error in call to completeTask: ${res.json()}`);
+          console.log(`Error in call to completeTask: ${res.json()}`);
+          return res.json();
+        }
+      })
+      .catch((error) => {
+        console.warn(`API_ERROR: ${error}`);
+        return {'status': 'Error', 'error': error};
+      });
+    return result;
+  },
 };
 
 export default TaskAPI;
