@@ -101,7 +101,12 @@ contract TaskJournal is PayableBasic {
   }
 
   function isPaid() public view returns (bool) {
-    return address(this).balance >= sumFeeCompleted();
+    uint total = sumFeeCompleted(); 
+    return total > 0 && address(this).balance >= total || released;
+  }
+  
+  function isReleased() public view returns (bool) {
+    return released; 
   }
 
   function isComplete() public view returns (bool) {

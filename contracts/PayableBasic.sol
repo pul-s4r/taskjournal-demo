@@ -6,11 +6,13 @@ contract PayableBasic {
     // Payable address can receive Ether
     address payable public owner;
     address payable public payee;
+    bool public released; 
 
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
 
     constructor() payable {
         owner = payable(msg.sender);
+        released = false; 
     }
 
     function getBalance() view public returns (uint) {
@@ -42,6 +44,7 @@ contract PayableBasic {
 
     function transfer(uint _amount) addressIsValid(payee) onlyOwner public virtual {
       transferToAddress(payee, _amount);
+      released = true; 
     }
 
     modifier addressIsValid(address payable _to) {
