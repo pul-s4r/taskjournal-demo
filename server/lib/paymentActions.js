@@ -139,7 +139,7 @@ const PaymentActions = {
     return new Promise((resolve, reject) => {
       taskJournal.instance.getBalance()
       .then((data) => {
-        var result = taskJournal.instance.transferToAddress(taskJournal.getContractorAccount(), data, {from: taskJournal.ownerAccount, gas:1000000})
+        var result = taskJournal.instance.transferToAddress(taskJournal.contractorAccount, data, {from: taskJournal.ownerAccount, gas:1000000})
         .then(() => { return {'status': 'Success'}; });
         res.status(200).json(result);
         resolve(result);
