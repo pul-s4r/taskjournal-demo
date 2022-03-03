@@ -3,22 +3,22 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import Header from '../components/Header.jsx';
-import LoginForm from '../components/LoginForm.jsx';
+import RegisterForm from '../components/RegisterForm.jsx';
 
-const LoginScreen = (props) => {
+const RegisterScreen = (props) => {
 
   return (
     <Container>
       <Header/>
       <Row className="justify-content-center" sm={3}>
-        <h1>Login</h1>
+        <h1>Register</h1>
       </Row>
       <Row className="justify-content-center" sm={3}>
-        <LoginForm />
+        <RegisterForm />
       </Row>
 
     </Container>
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;
