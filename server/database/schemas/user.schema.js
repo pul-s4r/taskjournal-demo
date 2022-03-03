@@ -14,4 +14,11 @@ userSchema.methods.comparePassword = function comparePassword(password) {
   return this.hashedPassword === sha256(password);
 };
 
+userSchema.methods.getPublicFields = function getPublicFields() {
+  return {
+    email: this.email,
+    accountType: this.accountType,
+  };
+};
+
 export default userSchema;

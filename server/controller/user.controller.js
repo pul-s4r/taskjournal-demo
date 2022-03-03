@@ -74,7 +74,7 @@ userController.post('/register', registerValidation, async (req, res) => {
         const token = jwt.sign({ email }, config.passport.secret, {
           expiresIn: 10000000,
         });
-        const userToReturn = { ...newUser.toJSON(), ...{ token } };
+        const userToReturn = { ...newUser.getPublicFields(), ...{ token } };
         delete userToReturn.hashedPassword;
         res.status(200).json(userToReturn);
       } else {
@@ -114,7 +114,7 @@ userController.post('/login', loginValidation, async (req, res) => {
           const token = jwt.sign({ email }, config.passport.secret, {
             expiresIn: 1000000,
           });
-          const userToReturn = { ...user.toJSON(), ...{ token } };
+          const userToReturn = { ...user.getPublicFields(), ...{ token } };
           delete userToReturn.hashedPassword;
           res.status(200).json(userToReturn);
         } else {
