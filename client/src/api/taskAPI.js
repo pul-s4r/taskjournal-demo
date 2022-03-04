@@ -1,12 +1,18 @@
+import Utils from './utils.js';
+
 const serverurl = 'http://localhost:8000';
 
 const TaskAPI = {
   getTasks: () => {
     const options = {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${Utils.getToken()}`,
+      }
     };
     var result = fetch(`${serverurl}${"/getTasks"}`, options)
       .then((res) => {
+        console.log(res);
         if (res.ok) {
           return res.json();
         } else {
