@@ -34,6 +34,22 @@ const Header = (props) => {
     nav("/login");
   };
 
+  const publicNav = (
+    <Navbar.Collapse className="basic-navbar-nav">
+      {publicNavBarLinks.map((link, idx) => (
+        <Nav.Link key={idx} href={link.href}>{link.name}</Nav.Link>
+      ))}
+    </Navbar.Collapse>
+  );
+
+  const privateNav = (
+    <Navbar.Collapse className="basic-navbar-nav">
+      {privateNavBarLinks.map((link, idx) => (
+        <Nav.Link key={idx} href={link.href}>{link.name}</Nav.Link>
+      ))}
+    </Navbar.Collapse>
+  );
+
   const publicUserNav = (
     <Navbar.Collapse className="justify-content-end">
       {publicUserNavBarLinks.map((link, idx) => (
@@ -60,13 +76,7 @@ const Header = (props) => {
       <Container>
         <Navbar.Brand href="#home">Job Manager</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            {privateNavBarLinks.map((link, idx) => (
-              <Nav.Link key={idx} href={link.href}>{link.name}</Nav.Link>
-            ))}
-          </Nav>
-        </Navbar.Collapse>
+        {authData.token ? privateNav : publicNav}
         {authData.token ? privateUserNav : publicUserNav}
       </Container>
     </Navbar>
