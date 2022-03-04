@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Container, Row, Col } from 'react-bootstrap';
 import { AuthContext, AuthDispatchContext, initialStateAuth } from '../contexts/AuthContext.js';
+import ConnectButton from './ConnectButton.jsx';
 
 const publicUserNavBarLinks = [
   { href: "/login", name: "Login" },
@@ -25,8 +26,8 @@ const privateNavBarLinks = [
 ];
 
 const Header = (props) => {
-  const { authData } = useContext(AuthContext);
-  const { setAuthData } = useContext(AuthDispatchContext);
+  const { authData, account, balance, selectedConnector } = useContext(AuthContext);
+  const { setAuthData, setActivatingConnector, handleActivate, handleDeactivate } = useContext(AuthDispatchContext);
   const nav = useNavigate();
 
   const handleLogout = () => {
@@ -63,8 +64,22 @@ const Header = (props) => {
       <Col sm={4}>
         <Navbar.Text className="mr-sm-2">Signed in as: {authData.email}</Navbar.Text>
       </Col>
+      <Col sm={3}>
+        <Navbar.Text>
+          <div>{`Account: ${account ? account : "..."}`}</div>
+          <div>{`Balance: ${balance ? balance : "..."}`}</div>
+        </Navbar.Text>
+      </Col>
+      <Col sm={2} className="mr-sm-2">
+        {
+          account ?
+          <ConnectButton statusconnect={"false"} onClick={() => {handleDeactivate()}}/>
+          : <ConnectButton statusconnect={"true"} onClick={() => {handleActivate()}}/>
+        }
+      </Col>
+      <Col sm={1}></Col>
       <Col sm={2}>
-        <Button className="" variant="outline-secondary" type="button" onClick={handleLogout}>
+        <Button className="mr-sm-2" variant="outline-secondary" type="button" onClick={handleLogout}>
           Logout
         </Button>
       </Col>
