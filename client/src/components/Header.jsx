@@ -26,8 +26,8 @@ const privateNavBarLinks = [
 ];
 
 const Header = (props) => {
-  const { authData, account, balance, selectedConnector } = useContext(AuthContext);
-  const { setAuthData, setActivatingConnector, handleActivate, handleDeactivate } = useContext(AuthDispatchContext);
+  const { authData, account, balance } = useContext(AuthContext);
+  const { setAuthData, handleActivate, handleDeactivate } = useContext(AuthDispatchContext);
   const nav = useNavigate();
 
   const handleLogout = () => {
