@@ -15,8 +15,8 @@ const AuthProvider = ({ children }) => {
   const [authData, setAuthData] = usePersistedState("auth", initialStateAuth);
 
   return (
-    <AuthContext.Provider value={authData}>
-      <AuthDispatchContext.Provider value={setAuthData}>
+    <AuthContext.Provider value={{authData: authData}}>
+      <AuthDispatchContext.Provider value={{setAuthData: setAuthData}}>
         {children}
       </AuthDispatchContext.Provider>
     </AuthContext.Provider>

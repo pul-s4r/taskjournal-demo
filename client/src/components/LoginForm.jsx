@@ -8,8 +8,8 @@ import UserAPI from '../api/userAPI.js';
 const SUCCESS = "Login Successful";
 
 const LoginForm = (props) => {
-  const authData = useContext(AuthContext);
-  const setAuthData = useContext(AuthDispatchContext);
+  const { authData } = useContext(AuthContext);
+  const { setAuthData } = useContext(AuthDispatchContext);
   const [formData, setFormData] = useState({
     email: "",
     password: ""
