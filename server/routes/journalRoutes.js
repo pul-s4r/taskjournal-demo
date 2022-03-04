@@ -1,6 +1,7 @@
 import express from 'express';
 import JournalActions from '../lib/journalActions.js';
-import PaymentActions from '../lib/paymentActions.js'
+import PaymentActions from '../lib/paymentActions.js';
+import { checkAuth } from '../store/utils.js';
 
 const router = express.Router();
 
@@ -13,9 +14,9 @@ const sendStatusMessage = async (req, res) => {
 };
 
 router.get('/', sendStatusMessage);
-router.get('/getTasks', JournalActions.getTasks);
-router.get('/getTaskIds', JournalActions.getTaskIds);
-router.get('/isFinalised', JournalActions.isFinalised);
+router.get('/getTasks', checkAuth, JournalActions.getTasks);
+router.get('/getTaskIds', checkAuth, JournalActions.getTaskIds);
+router.get('/isFinalised', checkAuth, JournalActions.isFinalised);
 
 router.post('/create', JournalActions.createTask);
 router.post('/modify', JournalActions.modifyTaskDesc);

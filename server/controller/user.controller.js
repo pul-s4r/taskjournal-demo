@@ -14,6 +14,7 @@ import {
   generateServerErrorCode,
   registerValidation,
   loginValidation,
+  checkAuth
 } from '../store/utils.js';
 
 import {
@@ -42,7 +43,7 @@ function createUser(email, password, accountType) {
  */
 userController.get(
   '/',
-  passport.authenticate('jwt', { session: false }),
+  checkAuth,
   (req, res) => {
     User.find({}, (err, result) => {
       res.status(200).json({

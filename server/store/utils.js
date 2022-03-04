@@ -1,5 +1,6 @@
 import sha256 from 'sha256';
 import { check } from 'express-validator';
+import passport from 'passport';
 import {
   PASSWORD_IS_EMPTY,
   PASSWORD_LENGTH_MUST_BE_MORE_THAN_8,
@@ -48,3 +49,5 @@ export const loginValidation = [
     .isLength({ min: 8 })
     .withMessage(PASSWORD_LENGTH_MUST_BE_MORE_THAN_8),
 ];
+
+export const checkAuth = passport.authenticate('jwt', { session: false });
