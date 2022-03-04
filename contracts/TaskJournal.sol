@@ -101,12 +101,12 @@ contract TaskJournal is PayableBasic {
   }
 
   function isPaid() public view returns (bool) {
-    uint total = sumFeeCompleted(); 
+    uint total = sumFeeCompleted();
     return total > 0 && address(this).balance >= total || released;
   }
-  
+
   function isReleased() public view returns (bool) {
-    return released; 
+    return released;
   }
 
   function isComplete() public view returns (bool) {
@@ -115,9 +115,9 @@ contract TaskJournal is PayableBasic {
     }
     return taskIdCtr > 0 ? true : false;
   }
-  
+
   function isFinalised() public view returns (bool) {
-    return finalised; 
+    return finalised;
   }
 
   function markFinalised() contractNotFinalised onlyOwner public {
@@ -150,10 +150,10 @@ contract TaskJournal is PayableBasic {
     }
     _;
   }
-  
+
   modifier allTasksComplete(uint id) {
-    require(isComplete(), "Incomplete tasks remaining"); 
-    _; 
+    require(isComplete(), "Incomplete tasks remaining");
+    _;
   }
 
   modifier contractNotFinalised() {
