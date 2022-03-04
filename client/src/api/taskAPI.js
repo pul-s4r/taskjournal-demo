@@ -132,7 +132,13 @@ const TaskAPI = {
     return result;
   },
   isFinalised: () => {
-    var result = fetch(`${serverurl}${"/isFinalised"}`).then((res) => {
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Utils.getToken()}`,
+      }
+    };
+    var result = fetch(`${serverurl}${"/isFinalised"}`, options).then((res) => {
       if (res.ok) {
         return res.json();
       } else {
