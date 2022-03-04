@@ -28,7 +28,8 @@ const TaskAPI = {
     const options = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json;charset=utf-8"
+        "Content-Type": "application/json;charset=utf-8",
+        Authorization: `Bearer ${Utils.getToken()}`,
       },
       body: JSON.stringify({
         "name": name,
@@ -55,7 +56,8 @@ const TaskAPI = {
     const options = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json;charset=utf-8"
+        "Content-Type": "application/json;charset=utf-8",
+        Authorization: `Bearer ${Utils.getToken()}`,
       },
       body: JSON.stringify({
         "id": id,
@@ -81,7 +83,8 @@ const TaskAPI = {
     const options = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json;charset=utf-8"
+        "Content-Type": "application/json;charset=utf-8",
+        Authorization: `Bearer ${Utils.getToken()}`,
       },
       body: JSON.stringify({
         "id": id,
@@ -107,7 +110,8 @@ const TaskAPI = {
     const options = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json;charset=utf-8"
+        "Content-Type": "application/json;charset=utf-8",
+        Authorization: `Bearer ${Utils.getToken()}`,
       },
       body: JSON.stringify({
         "id": id,
@@ -153,7 +157,13 @@ const TaskAPI = {
     return result;
   },
   getAmountPayable: () => {
-    var result = fetch(`${serverurl}${"/getAmountPayable"}`).then((res) => {
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Utils.getToken()}`,
+      }
+    };
+    var result = fetch(`${serverurl}${"/getAmountPayable"}`, options).then((res) => {
       if (res.ok) {
         return res.json();
       } else {
@@ -168,7 +178,13 @@ const TaskAPI = {
     return result;
   },
   isPaid: () => {
-    var result = fetch(`${serverurl}${"/isPaid"}`).then((res) => {
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Utils.getToken()}`,
+      }
+    };
+    var result = fetch(`${serverurl}${"/isPaid"}`, options).then((res) => {
       if (res.ok) {
         return res.json();
       } else {
@@ -183,7 +199,13 @@ const TaskAPI = {
     return result;
   },
   isReleased: () => {
-    var result = fetch(`${serverurl}${"/isReleased"}`).then((res) => {
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Utils.getToken()}`,
+      }
+    };
+    var result = fetch(`${serverurl}${"/isReleased"}`, options).then((res) => {
       if (res.ok) {
         return res.json();
       } else {
@@ -198,7 +220,13 @@ const TaskAPI = {
     return result;
   },
   getOwnerAccountBalance: () => {
-    var result = fetch(`${serverurl}${"/ownerBalance"}`).then((res) => {
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Utils.getToken()}`,
+      }
+    };
+    var result = fetch(`${serverurl}${"/ownerBalance"}`, options).then((res) => {
       if (res.ok) {
         return res.json();
       } else {
@@ -213,7 +241,13 @@ const TaskAPI = {
     return result;
   },
   getContractorAccountBalance: () => {
-    var result = fetch(`${serverurl}${"/contractorBalance"}`).then((res) => {
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Utils.getToken()}`,
+      }
+    };
+    var result = fetch(`${serverurl}${"/contractorBalance"}`, options).then((res) => {
       if (res.ok) {
         return res.json();
       } else {
@@ -228,7 +262,13 @@ const TaskAPI = {
     return result;
   },
   getContractBalance: () => {
-    var result = fetch(`${serverurl}${"/smcBalance"}`).then((res) => {
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Utils.getToken()}`,
+      }
+    };
+    var result = fetch(`${serverurl}${"/smcBalance"}`, options).then((res) => {
       if (res.ok) {
         return res.json();
       } else {
@@ -246,7 +286,8 @@ const TaskAPI = {
     const options = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json;charset=utf-8"
+        "Content-Type": "application/json;charset=utf-8",
+        Authorization: `Bearer ${Utils.getToken()}`,
       },
     };
 
@@ -270,7 +311,8 @@ const TaskAPI = {
     const options = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json;charset=utf-8"
+        "Content-Type": "application/json;charset=utf-8",
+        Authorization: `Bearer ${Utils.getToken()}`,
       },
       body: JSON.stringify({
         "value": value,
@@ -297,7 +339,8 @@ const TaskAPI = {
     const options = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json;charset=utf-8"
+        "Content-Type": "application/json;charset=utf-8",
+        Authorization: `Bearer ${Utils.getToken()}`,
       },
     };
 
