@@ -18,21 +18,21 @@ router.get('/getTasks', checkAuth, JournalActions.getTasks);
 router.get('/getTaskIds', checkAuth, JournalActions.getTaskIds);
 router.get('/isFinalised', checkAuth, JournalActions.isFinalised);
 
-router.post('/create', JournalActions.createTask);
-router.post('/modify', JournalActions.modifyTaskDesc);
-router.post('/delay', JournalActions.delayTaskRequest);
+router.post('/create', checkAuth, JournalActions.createTask);
+router.post('/modify', checkAuth, JournalActions.modifyTaskDesc);
+router.post('/delay', checkAuth, JournalActions.delayTaskRequest);
 router.post('/delayOutcome', JournalActions.delayTaskOutcome);
-router.post('/complete', JournalActions.completeTask);
-router.post('/finalise', JournalActions.finaliseContract);
+router.post('/complete', checkAuth, JournalActions.completeTask);
+router.post('/finalise', checkAuth, JournalActions.finaliseContract);
 
-router.get('/ownerBalance', PaymentActions.getOwnerAccountBalance);
-router.get('/contractorBalance', PaymentActions.getContractorAccountBalance);
-router.get('/smcBalance', PaymentActions.getContractBalance);
-router.get('/getAmountPayable', PaymentActions.getAmountPayable);
-router.get('/isPaid', PaymentActions.isPaid);
-router.get('/isReleased', PaymentActions.isReleased);
+router.get('/ownerBalance', checkAuth, PaymentActions.getOwnerAccountBalance);
+router.get('/contractorBalance', checkAuth, PaymentActions.getContractorAccountBalance);
+router.get('/smcBalance', checkAuth, PaymentActions.getContractBalance);
+router.get('/getAmountPayable', checkAuth, PaymentActions.getAmountPayable);
+router.get('/isPaid', checkAuth, PaymentActions.isPaid);
+router.get('/isReleased', checkAuth, PaymentActions.isReleased);
 
-router.post('/payContract', PaymentActions.makePaymentFromOwner);
-router.post('/releaseFunds', PaymentActions.transferPaymentToContractor);
+router.post('/payContract', checkAuth, PaymentActions.makePaymentFromOwner);
+router.post('/releaseFunds', checkAuth, PaymentActions.transferPaymentToContractor);
 
 export default router;
