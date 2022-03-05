@@ -3,6 +3,7 @@ export const initialWalletState = {
   web3Provider: null,
   address: null,
   chainId: null,
+  signer: null,
 };
 
 export function walletReducer(state, action) {
@@ -14,6 +15,7 @@ export function walletReducer(state, action) {
         web3Provider: action.web3Provider,
         address: action.address,
         chainId: action.chainId,
+        signer: action.signer,
       };
     case 'SET_ADDRESS':
       return {

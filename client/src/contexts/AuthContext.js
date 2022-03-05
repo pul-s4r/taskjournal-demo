@@ -31,7 +31,7 @@ const initialStateAuth = {
 const AuthProvider = ({ children }) => {
   const [authData, setAuthData] = usePersistedState("auth", initialStateAuth);
   const [state, dispatch] = useReducer(walletReducer, initialWalletState);
-  const { provider, web3Provider, address, chainId } = state;
+  const { provider, web3Provider, address, chainId, signer } = state;
   const [balance, setBalance] = useState(0);
 
   // Connect to selected provider
@@ -54,6 +54,7 @@ const AuthProvider = ({ children }) => {
       web3Provider, web3Provider,
       address: address,
       chainId: network.chainId,
+      signer: signer,
     });
   }, []);
 
@@ -133,7 +134,8 @@ const AuthProvider = ({ children }) => {
         web3Provider,
         address,
         chainId,
-        balance
+        balance,
+        signer
     }}>
       <AuthDispatchContext.Provider value={{
           setAuthData: setAuthData,
