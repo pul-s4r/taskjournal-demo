@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { Container, Row, Col } from 'react-bootstrap';
 
@@ -8,8 +8,6 @@ import TaskTable from '../components/TaskTable.jsx';
 import { TaskDataProvider } from '../contexts/TaskDataContext.js';
 
 const HomeScreen = (props) => {
-  const [title, setTitle] = React.useState("Home");
-
   return (
     <Container>
       <Header/>

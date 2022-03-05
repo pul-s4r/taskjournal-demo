@@ -12,11 +12,17 @@ const artifact = JSON.parse(
 class JournalState {
   constructor(config) {
     this.config = config;
+    this.provider = null;
+  }
+
+  initProvider() {
+    const { ethereumUrl } = this.config;
+    this.provider = new Web3.providers.HttpProvider(ethereumUrl);
   }
 
   setup() {
-    const { ethereumUrl } = this.config;
-    this.web3 = new Web3(new Web3.providers.HttpProvider(ethereumUrl));
+    this.initProvider();
+    this.web3 = new Web3(this.provider);
 
     this.contractdef = TruffleContract(artifact);
     this.contractdef.setProvider(this.web3.currentProvider);
@@ -52,8 +58,30 @@ class JournalState {
     return this.ownerAccount;
   }
 
+  setOwnerAccount(newAddress) {
+    try {
+      if (this.web3.utils.isAddress(newAddress)) {
+        this.ownerAccount = newAddress;
+        this.instance.setOwner(newAddress, {from: this.ownerAccount, gas:100000});
+      } else { console.log("INVALID"); }
+    } catch (error) {
+      console.log("ERROR: ", error);
+    }
+  }
+
   getContractorAccount() {
     return this.contractorAccount;
+  }
+
+  setContractorAccount(newAddress) {
+    try {
+      if (this.web3.utils.isAddress(newAddress)) {
+        this.contractorAccount = newAddress;
+        this.instance.setOwner(newAddress, {from: this.ownerAccount, gas:100000});
+      } else { console.log("INVALID"); }
+    } catch (error) {
+      console.log("ERROR: ", error);
+    }
   }
 }
 

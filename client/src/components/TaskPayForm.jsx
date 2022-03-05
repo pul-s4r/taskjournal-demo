@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Form, Button, Badge } from 'react-bootstrap';
+import { ethers } from 'ethers';
+
 import TaskAPI from '../api/taskAPI.js';
 import { PaymentDataContext, PaymentDataDispatchContext } from '../contexts/PaymentDataContext.js';
+import { AuthContext } from '../contexts/AuthContext.js';
 
 const TaskPayForm = (props) => {
   const paymentData = useContext(PaymentDataContext);
   const setPaymentData = useContext(PaymentDataDispatchContext);
+  const { authData, web3Provider, address, balance, signer } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     amount: "",
@@ -13,28 +17,43 @@ const TaskPayForm = (props) => {
   });
   const [displayOptions, setDisplayOptions] = useState({
     status: "Pending",
-    ownerBalance: 'N/A',
-    contractBalance: 'N/A'
+    ownerBalance: "N/A",
+    contractBalance: "N/A",
+    contractAddress: "",
   });
+
+  useEffect(() => {
+    handleFormRefresh();
+  }, []);
 
   const handleButtonFinalise = () => {
     TaskAPI.finalise().then((data) => {
     });
+    handleFormRefresh();
   };
 
   const handleFormSubmit = () => {
-    // Pay code
+    // Handle payment from wallet
     console.log("Amount: ", formData.amount);
-    TaskAPI.payFromOwner(formData.amount).then((data) => {
+    signer.sendTransaction({
+      from: address,
+      to: displayOptions.contractAddress,
+      value: ethers.utils.parseEther(formData.amount),
+      nonce: web3Provider.getTransactionCount(address, "latest"),
+      gasLimit: ethers.utils.hexlify(100000),
+      gasPrice: web3Provider.getGasPrice(),
+    })
+    .then(transaction => {
+      console.log("Sent transaction: ", transaction);
+    })
 
-    });
   };
 
   const handleFormRefresh = () => {
     console.log("Refresh called");
     Promise.all([
       TaskAPI.isFinalised().then(data => data.payload), TaskAPI.getAmountPayable().then(data => data.payload),
-      TaskAPI.getOwnerAccountBalance().then(data => data.payload),
+      TaskAPI.getContract().then(data => data.payload),
       TaskAPI.getContractBalance().then(data => data.payload)
     ])
       .then((values) => {
@@ -44,7 +63,8 @@ const TaskPayForm = (props) => {
             finalised: values[0],
             amountPayable: values[1]
           });
-          setDisplayOptions({...displayOptions, ownerBalance: values[2], contractBalance: values[3]});
+          console.log("Address: ", values[2])
+          setDisplayOptions({...displayOptions, ownerBalance: (authData.accountType === "OWNER" ? balance : "N/A (not owner)"), contractBalance: values[3], contractAddress: values[2]});
 
         }
       );

@@ -1,4 +1,5 @@
 import JournalState from './journalState.js';
+import AccountActions from './accountActions.js';
 
 import { readFile } from 'fs/promises';
 
@@ -7,7 +8,7 @@ const config = JSON.parse(
 );
 
 var taskJournal = new JournalState(config);
-taskJournal.setup()
+await taskJournal.setup()
   .then(() => {
     console.log('Successfully initialised contract state');
     console.log('at address: ', taskJournal.address);
