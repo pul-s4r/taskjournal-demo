@@ -20,10 +20,14 @@ const publicNavBarLinks = [
   { href: "/", name: "Home" },
 ];
 
-const privateNavBarLinks = [
+const privateNavBarLinksOwner = [
   { href: "/", name: "Home" },
-  { href: "/owner", name: "Owner View" },
-  { href: "/contractor", name: "Contractor View" },
+  { href: "/owner", name: "Edit Contract" },
+];
+
+const privateNavBarLinksContractor = [
+  { href: "/", name: "Home" },
+  { href: "/contractor", name: "Manage Contract" },
 ];
 
 const Header = (props) => {
@@ -45,9 +49,17 @@ const Header = (props) => {
     </Navbar.Collapse>
   );
 
-  const privateNav = (
+  const privateNavOwner = (
     <Navbar.Collapse className="basic-navbar-nav">
-      {privateNavBarLinks.map((link, idx) => (
+      {privateNavBarLinksOwner.map((link, idx) => (
+        <Nav.Link key={idx} href={link.href}>{link.name}</Nav.Link>
+      ))}
+    </Navbar.Collapse>
+  );
+
+  const privateNavContractor = (
+    <Navbar.Collapse className="basic-navbar-nav">
+      {privateNavBarLinksContractor.map((link, idx) => (
         <Nav.Link key={idx} href={link.href}>{link.name}</Nav.Link>
       ))}
     </Navbar.Collapse>
@@ -93,7 +105,9 @@ const Header = (props) => {
       <Container>
         <Navbar.Brand href="#home">Job Manager</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        {authData.token ? privateNav : publicNav}
+        {authData.token ?
+          (authData.accountType === "OWNER" ? privateNavOwner : privateNavContractor) 
+          : publicNav}
         {authData.token ? privateUserNav : publicUserNav}
       </Container>
     </Navbar>
