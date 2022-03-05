@@ -12,9 +12,6 @@ const HomeScreen = (props) => {
     <Container>
       <Header/>
       <h1>Home</h1>
-      <TaskDataProvider>
-        <TaskTable isManager={false}/>
-      </TaskDataProvider>
     </Container>
   );
 };
