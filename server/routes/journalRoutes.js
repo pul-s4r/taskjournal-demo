@@ -25,7 +25,10 @@ router.post('/delayOutcome', JournalActions.delayTaskOutcome);
 router.post('/complete', checkAuth, JournalActions.completeTask);
 router.post('/finalise', checkAuth, JournalActions.finaliseContract);
 
+router.get('/contractAddress', checkAuth, PaymentActions.getContract); 
+router.get('/ownerAddress', checkAuth, PaymentActions.getOwnerAccount);
 router.get('/ownerBalance', checkAuth, PaymentActions.getOwnerAccountBalance);
+router.get('/contractorAddress', checkAuth, PaymentActions.getContractorAccount);
 router.get('/contractorBalance', checkAuth, PaymentActions.getContractorAccountBalance);
 router.get('/smcBalance', checkAuth, PaymentActions.getContractBalance);
 router.get('/getAmountPayable', checkAuth, PaymentActions.getAmountPayable);

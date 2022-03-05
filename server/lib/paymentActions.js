@@ -14,7 +14,12 @@ const isFinalised = async (req, res) => {
 
 /* REWRITE AS PROMISE */
 const PaymentActions = {
+  getContract: async (req, res) => {
+    res.status(200).json({'status': 'Success', 'payload': taskJournal.address});
+    return taskJournal.address;
+  },
   getOwnerAccount: async (req, res) => {
+    res.status(200).json({'status': 'Success', 'payload': taskJournal.ownerAccount});
     return taskJournal.ownerAccount;
   },
   getOwnerAccountBalance: async (req, res) => {
@@ -34,6 +39,7 @@ const PaymentActions = {
     });
   },
   getContractorAccount: async (req, res) => {
+    res.status(200).json({'status': 'Success', 'payload': taskJournal.contractorAccount});
     return taskJournal.contractorAccount;
   },
   getContractorAccountBalance: async (req, res) => {
