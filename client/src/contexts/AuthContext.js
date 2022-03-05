@@ -46,8 +46,8 @@ const AuthProvider = ({ children }) => {
     const address = await signer.getAddress();
     const network = await web3Provider.getNetwork();
 
-    setBalance(await web3Provider.getBalance(address));
-    
+    setBalance(utils.formatUnits(await web3Provider.getBalance(address)));
+
     dispatch({
       type: 'SET_WEB3_PROVIDER',
       provider: provider,
@@ -77,7 +77,7 @@ const AuthProvider = ({ children }) => {
 
   const handleUpdateBalance = async () => {
     const newBal = await web3Provider?.getBalance(address);
-    setBalance(newBal);
+    setBalance(utils.formatUnits(newBal));
   }
 
   const ownAddressFilter = {
