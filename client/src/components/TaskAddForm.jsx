@@ -13,7 +13,6 @@ const TaskAddForm = (props) => {
   });
 
   const handleFormSubmit = () => {
-    // console.log("Sending: ", formData.name, formData.desc, Date(formData.due))
     TaskAPI.createTask(formData.name, formData.desc, formData.due, formData.fee).then((payload) => {
       setDisplayOptions({...displayOptions, status: payload.status});
     });

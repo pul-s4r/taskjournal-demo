@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Form, Button, Badge } from 'react-bootstrap';
 import TaskAPI from '../api/taskAPI.js';
-// import { PaymentDataContext, PaymentDataDispatchContext } from '../contexts/PaymentDataContext.js';
 
 const TaskReleaseForm = (props) => {
-  // const paymentData = useContext(PaymentDataContext);
-  // const setPaymentData = useContext(PaymentDataDispatchContext);
 
   const [displayOptions, setDisplayOptions] = useState({
     status: "Pending",
@@ -14,14 +11,9 @@ const TaskReleaseForm = (props) => {
   });
 
   const handleFormSubmit = () => {
-    // TaskAPI.getContractorAccountBalance()
-    //   .then((data) => data.payload)
-    //   .then((data) => {
-    //     console.log("Amount: ", data);
-      TaskAPI.transferToContractor().then((data) => {
+    TaskAPI.transferToContractor().then((data) => {
 
-      });
-      // });
+    });
   };
 
   const handleFormRefresh = () => {

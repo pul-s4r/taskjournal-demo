@@ -6,13 +6,10 @@ import TaskAPI from '../api/taskAPI.js';
 import { TaskDataContext, TaskDataDispatchContext } from '../contexts/TaskDataContext.js';
 
 const TaskTable = (props) => {
-  // const [taskData, setTaskData] = useState([]);
   const { isManager } = props;
 
   const taskData = useContext(TaskDataContext);
   const setTaskData = useContext(TaskDataDispatchContext);
-
-  // const [taskData, setTaskData] = useContext(TaskDataContext);
 
   const [displayOptions, setDisplayOptions] = useState({
     showCompleted: true,

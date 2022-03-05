@@ -29,21 +29,18 @@ const TaskPayForm = (props) => {
   const handleButtonFinalise = () => {
     TaskAPI.finalise().then((data) => {
     });
-    handleFormRefresh(); 
+    handleFormRefresh();
   };
 
   const handleFormSubmit = () => {
     // Handle payment from wallet
     console.log("Amount: ", formData.amount);
-    // TaskAPI.payFromOwner(formData.amount).then((data) => {
-    //
-    // });
     signer.sendTransaction({
       from: address,
       to: displayOptions.contractAddress,
       value: ethers.utils.parseEther(formData.amount),
       nonce: web3Provider.getTransactionCount(address, "latest"),
-      gasLimit: ethers.utils.hexlify(100000), // 100000
+      gasLimit: ethers.utils.hexlify(100000),
       gasPrice: web3Provider.getGasPrice(),
     })
     .then(transaction => {
