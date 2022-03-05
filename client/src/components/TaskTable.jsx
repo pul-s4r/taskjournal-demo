@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Container, Row, Col, Table, Button, ButtonGroup, ToggleButton } from 'react-bootstrap';
+import { Container, Row, Col, Table, Button, ToggleButtonGroup, ToggleButton } from 'react-bootstrap';
 import { formatDate } from '../utils/utils.js';
 
 import TaskAPI from '../api/taskAPI.js';
@@ -15,7 +15,7 @@ const TaskTable = (props) => {
   // const [taskData, setTaskData] = useContext(TaskDataContext);
 
   const [displayOptions, setDisplayOptions] = useState({
-    showCompleted: false,
+    showCompleted: true,
   });
   const [radioValue, setRadioValue] = useState('Yes');
   const radios = [
@@ -31,6 +31,10 @@ const TaskTable = (props) => {
   };
 
   useEffect(() => {
+    handleTaskDataUpdate();
+  }, []);
+
+  useEffect(() => {
 
   }, [displayOptions.showCompleted]);
 
@@ -42,7 +46,11 @@ const TaskTable = (props) => {
       <Row>
         <Col sm={2} className="align-items-center">Show Completed: </Col>
         <Col sm={2}>
-          <ButtonGroup>
+          <ToggleButtonGroup
+            type="radio"
+            name="showCompleted"
+            defaultValue={[true]}
+          >
             {radios.map((radio, value) => (
               <ToggleButton
                 key={value}
@@ -60,7 +68,7 @@ const TaskTable = (props) => {
                 {radio.name}
               </ToggleButton>
             ))}
-          </ButtonGroup>
+          </ToggleButtonGroup>
         </Col>
         <Col sm={2}>
           <Button onClick={() => handleTaskDataUpdate()}>
