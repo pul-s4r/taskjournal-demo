@@ -219,6 +219,48 @@ const TaskAPI = {
     });
     return result;
   },
+  getContract: () => {
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Utils.getToken()}`,
+      }
+    };
+    var result = fetch(`${serverurl}${"/contractAddress"}`, options).then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        console.log(`Error in call to completeTask: ${res.json()}`);
+        return res.json();
+      }
+    })
+    .catch((error) => {
+      console.warn(`API_ERROR: ${error}`);
+      return {'status': 'Error', 'error': error};
+    });
+    return result;
+  },
+  getOwnerAccount: () => {
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Utils.getToken()}`,
+      }
+    };
+    var result = fetch(`${serverurl}${"/ownerAddress"}`, options).then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        console.log(`Error in call to completeTask: ${res.json()}`);
+        return res.json();
+      }
+    })
+    .catch((error) => {
+      console.warn(`API_ERROR: ${error}`);
+      return {'status': 'Error', 'error': error};
+    });
+    return result;
+  },
   getOwnerAccountBalance: () => {
     const options = {
       method: "GET",
