@@ -62,6 +62,7 @@ const PaymentActions = {
     return new Promise((resolve, reject) => {
       taskJournal.instance.getBalance()
         .then((data) => {
+          data = web3.utils.fromWei(data); 
           res.status(200).json({'status': 'Success', 'payload': data});
           resolve({'status': 'Success', 'payload': data});
         })
