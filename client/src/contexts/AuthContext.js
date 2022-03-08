@@ -34,6 +34,8 @@ const AuthProvider = ({ children }) => {
   const { provider, web3Provider, address, chainId, signer } = state;
   const [balance, setBalance] = useState(0);
 
+  console.log("TOKEN: ", authData.token); 
+
   // Connect to selected provider
   const connect = useCallback(async function () {
     // Initial provider (injected)
@@ -56,6 +58,10 @@ const AuthProvider = ({ children }) => {
       chainId: network.chainId,
       signer: signer,
     });
+
+    console.log("Address: ", address);
+
+    // Set owner address on contract
   }, []);
 
   // Disconnect: call provider
