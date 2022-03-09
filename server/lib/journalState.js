@@ -31,17 +31,25 @@ class JournalState {
     this.network = this.networks[this.networks.length - 1];
     this.address = artifact.networks[this.network].address;
 
-    const contractorAccPromise = new Promise((resolve, reject) => {
+    /* const contractorAccPromise = new Promise((resolve, reject) => {
       AccountActions.getAccountIndexed(this.web3, 1).then((account) => {
         this.contractorAccount = account;
         resolve(this.contractorAccount);
       });
-    });
+    }); */
+    this.contractorAccount = "0x0";
 
-    return new Promise((resolve, reject) => {
-      AccountActions.getAccount(this.web3)
+    return new Promise(async (resolve, reject) => {
+      try {
+        this.ownerAccount = "0x0";
+        this.instance = await this.contractdef.at(this.address);
+        resolve(this.instance);
+      } catch (error) {
+        reject(error);
+      }
+      /* AccountActions.getAccount(this.web3)
         .then((account) => {
-          this.ownerAccount = account;
+          this.ownerAccount = "0x0";
           return this.contractdef.at(this.address);
         })
         .then((instance) => {
@@ -50,7 +58,7 @@ class JournalState {
         })
         .catch((error) => {
           reject(error);
-        });
+        }); */
     });
   }
 

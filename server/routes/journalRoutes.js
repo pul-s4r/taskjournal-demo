@@ -35,7 +35,9 @@ router.get('/getAmountPayable', checkAuth, PaymentActions.getAmountPayable);
 router.get('/isPaid', checkAuth, PaymentActions.isPaid);
 router.get('/isReleased', checkAuth, PaymentActions.isReleased);
 
-router.post('/payContract', checkAuth, PaymentActions.makePaymentFromOwner);
+router.post('/setOwnerAddress', checkAuth, PaymentActions.setOwnerAccount);
+router.post('/setContractorAddress', checkAuth, PaymentActions.setContractorAccount);
+router.post('/payContract', checkAuth, PaymentActions.makePaymentToContract);
 router.post('/releaseFunds', checkAuth, PaymentActions.transferPaymentToContractor);
 
 export default router;

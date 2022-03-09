@@ -261,6 +261,30 @@ const TaskAPI = {
     });
     return result;
   },
+  setOwnerAccount: (address) => {
+    const options = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${Utils.getToken()}`,
+      },
+      body: JSON.stringify({
+        address: address,
+      }),
+    };
+    var result = fetch(`${serverurl}${"/setOwnerAddress"}`, options).then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        console.log(`Error in call to set owner account: ${res.json()}`);
+        return res.json();
+      }
+    })
+    .catch((error) => {
+      console.warn(`API_ERROR: ${error}`);
+      return {'status': 'Error', 'error': error};
+    });
+    return result;
+  },
   getOwnerAccountBalance: () => {
     const options = {
       method: "GET",
