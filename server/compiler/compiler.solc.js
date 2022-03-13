@@ -35,15 +35,15 @@ class SolcCompiler {
 
   async appendSourceFromStorage(prefix="../../contracts", filename) {
     const contents = await readFile(new URL(file, import.meta.url));
-    this.input.sources = {... sources, [file]: {content: contents}};
+    this.input.sources = {... sources, [filename]: {content: contents}};
   }
 
-  async appendSources(filename, contents) {
+  async appendSource(filename, contents) {
     // assert contents is a string
     if (typeof filename !== 'string' || typeof contents !== 'string') {
       throw "Assertion failed: either filename or source is not a string";
     }
-    this.input.sources = {... sources, [file]: {content: contents}};
+    this.input.sources = {... sources, [filename]: {content: contents}};
   }
 
   async clearSources() {
