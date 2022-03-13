@@ -33,7 +33,7 @@ class SolcCompiler {
     this.input.sources = Object.fromEntries(new Map([...sources]));
   }
 
-  async appendSourcesFromStorage(prefix="../../contracts", filename) {
+  async appendSourceFromStorage(prefix="../../contracts", filename) {
     const contents = await readFile(new URL(file, import.meta.url));
     this.input.sources = {... sources, [file]: {content: contents}};
   }
