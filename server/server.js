@@ -10,6 +10,7 @@ import { config } from './store/config.js';
 import { applyPassportStrategy } from './store/passport.js';
 import { userController } from './controller/index.js';
 import { contractdefController } from './controller/index.js';
+import { contractinstController } from './controller/index.js';
 
 const app = express();
 const port = 8000;
@@ -24,6 +25,7 @@ app.use(bodyParser.json());
 app.use('/', journalRoutes);
 app.use('/auth', userController);
 app.use('/contract/definition', contractdefController);
+app.use('/contract/instance', contractinstController);
 
 const { mongoDBUri, mongoHostName } = config.env;
 app.listen(port, () => {
