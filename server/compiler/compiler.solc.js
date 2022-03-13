@@ -18,7 +18,7 @@ class SolcCompiler {
     };
   }
 
-  async buildInputFromStorage(prefix="../../contracts", ...filenames) {
+  async buildSourcesFromStorage(prefix="../../contracts", ...filenames) {
     var sources = await Promise.all(
       filenames.map(async (file) => {
           try {
@@ -33,12 +33,12 @@ class SolcCompiler {
     this.input.sources = Object.fromEntries(new Map([...sources]));
   }
 
-  async appendInputFromStorage(prefix="../../contracts", filename) {
+  async appendSourcesFromStorage(prefix="../../contracts", filename) {
     const contents = await readFile(new URL(file, import.meta.url));
     this.input.sources = {... sources, [file]: {content: contents}};
   }
 
-  async appendInput(filename, contents) {
+  async appendSources(filename, contents) {
     // assert contents is a string
     if (typeof filename !== 'string' || typeof contents !== 'string') {
       throw "Assertion failed: either filename or source is not a string";
@@ -46,7 +46,11 @@ class SolcCompiler {
     this.input.sources = {... sources, [file]: {content: contents}};
   }
 
-  compile() {
+  async clearSources() {
+    this.input.sources = {};
+  }
+
+  async compile() {
     try {
       const result = this.input ? this.compiler.compile(JSON.stringify(this.input)) : null;
       return JSON.parse(result);
