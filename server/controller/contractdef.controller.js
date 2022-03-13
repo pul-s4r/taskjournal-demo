@@ -35,7 +35,9 @@ function createDefinition(name, type, input, bytecode, abi, owner) {
     input,
     bytecode,
     abi,
-    owner
+    owner,
+    dateCreated: new Date(Date.now()),
+    dateModified: new Date(Date.now()),
   }).save();
 }
 
@@ -119,6 +121,7 @@ contractdefController.patch('/edit', [checkAuth], async (req, res) => {
         if (existing[key] && existing[key] !== req.body[key])
           updated.$set[key] = req.body[key];
       }
+      updated.$set['dateModified'] = new Date(Date.now()); 
       const result = await ContractDef.findOneAndUpdate({ id: id }, updated);
       res.status(200).send(result.getSummaryFields());
     } else {

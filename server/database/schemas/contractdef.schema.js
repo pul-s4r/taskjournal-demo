@@ -11,6 +11,8 @@ const contractdefSchema = new mongoose.Schema({
   abi: { type: Mixed, required: true },
   owner: { type: ObjectId, required: true },
   users: { type: [{ id: ObjectId, role: { type: String, enum: ["EDITOR", "VIEWER"] } }], required: false },
+  dateCreated: { type: Date, required: false },
+  dateModified: { type: Date, required: false }, 
   output: {type: Mixed, required: false},
 });
 
