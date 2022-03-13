@@ -98,14 +98,12 @@ contractdefController.post('/add', [checkAuth, upload.array("files")], async (re
       await compiler.appendSource(file.originalname, Buffer.from(file.buffer).toString("utf-8"));
     }
     compiler.compile().then(async (result) => {
-      console.log("Result: ", result);
-      for (let contractSourceName of Object.keys(result.contracts)) {
-        const contractName = Object.keys(result.contracts[contractSourceName])[0];
-        const bytecode = result.contracts[contractSourceName][contractName].evm.bytecode.object;
-        const abi = result.contracts[contractSourceName][contractName].abi;
-        // console.log(`${contractName}: \n[B/C] ${bytecode} \n[ABI]${JSON.stringify(abi[3])}`);
-        const newDef = await createDefinition(name, type, compiler.input, bytecode, abi, ownerId);
-      }
+      const contractSourceName = (Object.keys(result.contracts).includes(main)) ? main : Object.keys(result.contracts)[0];
+      const contractName = Object.keys(result.contracts[contractSourceName])[0];
+      const bytecode = result.contracts[contractSourceName][contractName].evm.bytecode.object;
+      const abi = result.contracts[contractSourceName][contractName].abi;
+      // console.log(`${contractName}: \n[B/C] ${bytecode} \n[ABI]${JSON.stringify(abi[3])}`);
+      const newDef = await createDefinition(name, type, compiler.input, bytecode, abi, ownerId);
     }).catch((error) => {
       console.error("[Add by sources] Error compiling contract: ", error);
     });
