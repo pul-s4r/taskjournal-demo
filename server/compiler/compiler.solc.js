@@ -38,7 +38,7 @@ class SolcCompiler {
     this.input.sources = {... sources, [file]: {content: contents}};
   }
 
-  async appendSources(filename, contents) {
+  async appendSource(filename, contents) {
     // assert contents is a string
     if (typeof filename !== 'string' || typeof contents !== 'string') {
       throw "Assertion failed: either filename or source is not a string";
