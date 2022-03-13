@@ -5,10 +5,13 @@ import { ExtractJwt } from 'passport-jwt';
 import jwt_decode from "jwt-decode";
 
 import { User, ContractDef } from '../database/models/index.js';
+import upload from '../middleware/upload.js';
+import SolcCompiler from '../compiler/compiler.solc.js';
 
 const extractJwtFromBearer = ExtractJwt.fromAuthHeaderAsBearerToken();
 
 const contractdefController = express.Router();
+const compiler = new SolcCompiler();
 
 import {
   checkAuth
@@ -77,7 +80,52 @@ contractdefController.get('/byid/:id', checkAuth, async (req, res) => {
   }
 });
 
-contractdefController.post('/add', [checkAuth, ...adddefValidation], async (req, res) => {
+contractdefController.post('/add', [checkAuth, upload.array("files")], async (req, res) => {
+  try {
+    const { name, type, link, main } = JSON.parse(req.body.info);
+    const files = req.files;
+    const filenames = [];
+
+    const jwt = jwt_decode(extractJwtFromBearer(req));
+    const email = jwt.email;
+    const user = await User.findOne({ email });
+    const ownerId = user.id;
+
+    // Form compiler input
+    compiler.clearSources();
+    for (let file of req.files) {
+      filenames.push(file.originalname);
+      await compiler.appendSource(file.originalname, Buffer.from(file.buffer).toString("utf-8"));
+    }
+    compiler.compile().then(async (result) => {
+      console.log("Result: ", result);
+      for (let contractSourceName of Object.keys(result.contracts)) {
+        const contractName = Object.keys(result.contracts[contractSourceName])[0];
+        const bytecode = result.contracts[contractSourceName][contractName].evm.bytecode.object;
+        const abi = result.contracts[contractSourceName][contractName].abi;
+        // console.log(`${contractName}: \n[B/C] ${bytecode} \n[ABI]${JSON.stringify(abi[3])}`);
+        const newDef = await createDefinition(name, type, compiler.input, bytecode, abi, ownerId);
+      }
+    }).catch((error) => {
+      console.error("[Add by sources] Error compiling contract: ", error);
+    });
+    res.status(202).json({
+      data: {
+        name,
+        type,
+        filenames,
+      },
+    });
+  } catch (e) {
+    res.status(500).json({
+      code: 500,
+      errors: [e.message],
+      message: "[Add by sources] Contract definition could not be added"
+    });
+  }
+});
+
+contractdefController.post('/add/compiled', [checkAuth, ...adddefValidation], async (req, res) => {
   const errorsAfterValidation = validationResult(req);
   try {
     if (errorsAfterValidation.isEmpty()) {
@@ -103,7 +151,7 @@ contractdefController.post('/add', [checkAuth, ...adddefValidation], async (req,
     res.status(500).json({
       code: 500,
       errors: [e.message],
-      message: "[Add] Contract definition could not be added"
+      message: "[Add compiled entry] Contract definition could not be added"
     });
   }
 });
@@ -121,7 +169,7 @@ contractdefController.patch('/edit', [checkAuth], async (req, res) => {
         if (existing[key] && existing[key] !== req.body[key])
           updated.$set[key] = req.body[key];
       }
-      updated.$set['dateModified'] = new Date(Date.now()); 
+      updated.$set['dateModified'] = new Date(Date.now());
       const result = await ContractDef.findOneAndUpdate({ id: id }, updated);
       res.status(200).send(result.getSummaryFields());
     } else {
