@@ -97,11 +97,39 @@ contractinstController.post("/deploy", checkAuth, async (req, res) => {
     });
   }
 });
+
+/* Note: this is intended for testing only
+Fetch ABI/address on frontend, initialise contract and call methods from frontend instead
+*/
 contractinstController.post("/call", checkAuth, async (req, res) => {
   try {
-    res.status(200).json({
-      data: {},
-    });
+    const { name, address, method, params, account, gas, calltype } = req.body;
+
+    const contract = await ContractInst.findOne({ name });
+    const contractdef = await ContractDef.findOne({ id: contract.contractdefId });
+    if (contract && contractdef) {
+      const contractinst = new deployer.web3.eth.Contract(contractdef.abi, address);
+      const contractmethod = contractinst.methods[method](... Object.values(params));
+      calltype === "SEND" ? contractmethod.send(
+        {from: account, gas: gas}
+      ).then((result) => {
+        res.status(200).json({
+          data: result,
+        });
+      })
+      : calltype === "CALL" ? contractmethod.call().then((result) => {
+        res.status(200).json({
+          data: result,
+        });
+      }) : res.status(202).json({
+        data: {message: "No call type specified"},
+      });
+    } else {
+      res.status(404).send({
+        code: 404,
+        errors: ["[Call] Contract definition not found"]
+      });
+    }
   } catch (error) {
     res.status(500).json({
       code: 500,
@@ -111,8 +139,36 @@ contractinstController.post("/call", checkAuth, async (req, res) => {
   }
 });
 
-// TODO: get method list/ABI
 // TODO: set address of current instance
 // TODO: remove instance
+/* Remove instance: delete contracts (development purposes only)
+  Should consider long-term persistence/life of instance in DB
+*/
+contractinstController.delete("/delete/:id?", checkAuth, async (req, res) => {
+  try {
+    const id = Object.keys(req.body).length > 0 ? req.body.id : req.params.id;
+    const found = await ContractInst.findOne({ id: id });
+    if (mongoose.isValidObjectId(id) && found) {
+      const result = await ContractInst.findByIdAndRemove(id);
+      const ownerId = found.owner;
+
+      const userResult = await User.updateOne({_id: ownerId}, {
+        $pull: {"content.contractInstances": found.id}
+      });
+      res.status(200).send(result);
+    } else {
+      res.status(404).send({
+        code: 404,
+        errors: ["[Delete] Contract instance not found"]
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      code: 500,
+      errors: [error.message],
+      message: "[Delete] Contract instance could not be called"
+    });
+  }
+});
 
 export default contractinstController;
