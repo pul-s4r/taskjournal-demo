@@ -2,8 +2,6 @@ import Web3 from 'web3';
 
 import BaseDeployer from './deployer.base.js';
 
-import * as networkconf from './network.conf.js';
-
 class Web3Deployer {
   constructor(config) {
     this.config = config;

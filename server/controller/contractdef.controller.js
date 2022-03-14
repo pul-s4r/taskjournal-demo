@@ -80,6 +80,30 @@ contractdefController.get('/byid/:id', checkAuth, async (req, res) => {
   }
 });
 
+// Get method list/ABI: use this to initialise contracts on the frontend
+contractdefController.get("/abi/:id", checkAuth, async (req, res) => {
+  const { id } = req.params;
+  try {
+    ContractDef.findOne({_id: id}).then((result) => {
+      res.status(200).json({
+        data: result.abi,
+      });
+    }).catch((error) => {
+      res.status(500).json({
+        code: 500,
+        errors: [error.message],
+        message: "[Get ABI] Contract or JSON interface not found"
+      });
+    });
+  } catch (error) {
+    res.status(500).json({
+      code: 500,
+      errors: [error.message],
+      message: "[Get ABI] Contract JSON interface could not be called"
+    });
+  }
+});
+
 contractdefController.post('/add', [checkAuth, upload.array("files")], async (req, res) => {
   try {
     const { name, type, link, main } = JSON.parse(req.body.info);
