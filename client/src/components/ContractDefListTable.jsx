@@ -56,6 +56,7 @@ const ContractDefListTable = (props) => {
                     <Button variant="outline-primary">
                       Edit
                     </Button>
+                    {' '}
                     <Button variant="outline-danger">
                       Delete
                     </Button>
