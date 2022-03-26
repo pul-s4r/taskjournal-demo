@@ -44,9 +44,11 @@ function createDefinition(name, type, input, bytecode, abi, owner) {
   }).save();
 }
 
-contractdefController.get('/:email', checkAuth, async (req, res) => {
+contractdefController.get('/', checkAuth, async (req, res) => {
   try {
-    const { email } = req.params;
+    const jwt = jwt_decode(extractJwtFromBearer(req));
+    const email = jwt.email;
+
     const user = await User.findOne({ email });
     const id = user.id;
     ContractDef.find({owner: id}, (err, result) => {
