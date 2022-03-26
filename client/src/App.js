@@ -8,6 +8,7 @@ import JobManager from './screens/JobManager.jsx';
 import JobView from './screens/JobView.jsx';
 import LoginScreen from './screens/LoginScreen.jsx';
 import RegisterScreen from './screens/RegisterScreen.jsx';
+import DeployerScreen from './screens/DeployerScreen.jsx';
 import { AuthProvider } from './contexts/AuthContext.js';
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
                 <Route path="/register" element={<RegisterScreen/>}/>
                 <Route path="/contractor" element={<JobManager/>}/>
                 <Route path="/owner" element={<JobView/>}/>
+                <Route path="/contracts" element={<DeployerScreen/>}/>
             </Routes>
         </BrowserRouter>
       </AuthProvider>
