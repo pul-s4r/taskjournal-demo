@@ -24,6 +24,9 @@ const ContractAPI = {
       });
     return result;
   },
+  addContractDef: (name, type, files, main) => {
+    
+  }
 };
 
 export default ContractAPI;
