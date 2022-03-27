@@ -28,7 +28,6 @@ const ContractAddModal = (props) => {
   };
   const handleShow = () => setShow(true);
   const handleSubmit = (event) => {
-    console.log(formData);
     event.preventDefault();
     const newErrors = findErrors();
     if ( Object.keys(newErrors).length > 0 ) {
@@ -36,9 +35,9 @@ const ContractAddModal = (props) => {
     } else {
       ContractAPI.addContractDef(formData.name, formData.type.toUpperCase(), formData.srcs, formData.main)
       .then((result) => {
-        console.log("Result: ", result);
+
       });
-      // handleClose();
+      handleClose();
     }
   };
 

@@ -17,6 +17,8 @@ const ContractDefListTable = (props) => {
     });
   };
 
+  console.log(contractDefData); 
+
   useEffect(() => {
     handleContractDefDataUpdate();
   }, []);
@@ -27,7 +29,11 @@ const ContractDefListTable = (props) => {
         <h1>Contract Definition List</h1>
       </Row>
       <Row>
-
+        <Col sm={2}>
+          <Button onClick={() => handleContractDefDataUpdate()}>
+            Refresh
+          </Button>
+        </Col>
       </Row>
       <Table responsive striped size="sm">
         <thead>
