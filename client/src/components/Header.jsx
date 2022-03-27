@@ -23,6 +23,7 @@ const publicNavBarLinks = [
 const privateNavBarLinksOwner = [
   { href: "/", name: "Home" },
   { href: "/owner", name: "Edit Contract" },
+  { href: "/contracts", name: "Manage and Deploy" },
 ];
 
 const privateNavBarLinksContractor = [
@@ -106,7 +107,7 @@ const Header = (props) => {
         <Navbar.Brand href="#home">Job Manager</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         {authData.token ?
-          (authData.accountType === "OWNER" ? privateNavOwner : privateNavContractor) 
+          (authData.accountType === "OWNER" ? privateNavOwner : privateNavContractor)
           : publicNav}
         {authData.token ? privateUserNav : publicUserNav}
       </Container>
