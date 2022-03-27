@@ -56,7 +56,30 @@ const ContractAPI = {
         console.warn(`API_ERROR: ${error}`);
       });
     return result;
-  }
+  },
+  deleteContractDef: (cdefId) => {
+    const options = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8", 
+        Authorization: `Bearer ${Utils.getToken()}`,
+      },
+      body: JSON.stringify({id: cdefId}),
+    };
+    var result = fetch(`${serverurl}${"/contract/definition/delete"}`, options)
+      .then((res) => {
+        console.log(res);
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error(`Error in call to getTasks: ${res.json()}`);
+        }
+      })
+      .catch((error) => {
+        console.warn(`API_ERROR: ${error}`);
+      });
+    return result;
+  },
 };
 
 export default ContractAPI;

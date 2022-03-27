@@ -17,7 +17,16 @@ const ContractDefListTable = (props) => {
     });
   };
 
-  console.log(contractDefData); 
+  const handleContractDefDelete = (id) => {
+    ContractAPI.deleteContractDef(id).then((result) => {
+      console.log(result);
+      if (result) {
+        setContractDefData(contractDefData.filter(entry => entry['_id'] !== id));
+      }
+    });
+  };
+
+  console.log(contractDefData);
 
   useEffect(() => {
     handleContractDefDataUpdate();
@@ -63,7 +72,9 @@ const ContractDefListTable = (props) => {
                       Edit
                     </Button>
                     {' '}
-                    <Button variant="outline-danger">
+                    <Button variant="outline-danger"
+                      onClick={() => handleContractDefDelete(contractDef['_id'])}
+                    >
                       Delete
                     </Button>
                   </th>
