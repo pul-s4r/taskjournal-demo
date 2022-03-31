@@ -61,7 +61,7 @@ const ContractAPI = {
     const options = {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json;charset=utf-8", 
+        "Content-Type": "application/json;charset=utf-8",
         Authorization: `Bearer ${Utils.getToken()}`,
       },
       body: JSON.stringify({id: cdefId}),
@@ -73,6 +73,76 @@ const ContractAPI = {
           return res.json();
         } else {
           throw new Error(`Error in call to getTasks: ${res.json()}`);
+        }
+      })
+      .catch((error) => {
+        console.warn(`API_ERROR: ${error}`);
+      });
+    return result;
+  },
+  getContractInsts: () => {
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Utils.getToken()}`,
+      }
+    };
+    var result = fetch(`${serverurl}${"/contract/instance"}`, options)
+      .then((res) => {
+        console.log(res);
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error(`Error in call to get contract instances: ${res.json()}`);
+        }
+      })
+      .catch((error) => {
+        console.warn(`API_ERROR: ${error}`);
+      });
+    return result;
+  },
+  addContractInst: (name, contractdefId, network) => {
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+        Authorization: `Bearer ${Utils.getToken()}`,
+      },
+      body: JSON.stringify({
+        "name": name,
+        "contractdefId": contractdefId,
+        "network" : network,
+      }),
+    };
+    var result = fetch(`${serverurl}${"/contract/instance/deploy"}`, options)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error(`Error in call to add contract instance: ${res.json()}`);
+        }
+      })
+      .catch((error) => {
+        console.warn(`API_ERROR: ${error}`);
+      });
+    return result;
+  },
+  deleteContractInst: (cinstId) => {
+    const options = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+        Authorization: `Bearer ${Utils.getToken()}`,
+      },
+      body: JSON.stringify({id: cinstId}),
+    };
+    var result = fetch(`${serverurl}${"/contract/instance/delete"}`, options)
+      .then((res) => {
+        console.log(res);
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error(`Error in call to delete contract instance: ${res.json()}`);
         }
       })
       .catch((error) => {
