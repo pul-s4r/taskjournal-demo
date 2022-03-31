@@ -82,7 +82,7 @@ const ContractAddModal = (props) => {
             <Form.Group className="mb-3" controlId="addForm.Type">
               <Form.Label>Contract Type</Form.Label>
               <Form.Select
-                onChange={(e) => {
+                onClick={(e) => {
                   setFormData({... formData, type: e.target.value});
                 }}
                 isInvalid={ !!errors.type }
@@ -112,7 +112,7 @@ const ContractAddModal = (props) => {
             <Form.Group className="mb-3" controlId="addForm.Main">
               <Form.Label>Main File</Form.Label>
               <Form.Select
-                onChange={(e) => {
+                onClick={(e) => {
                   setFormData({... formData, main: e.target.value});
                 }}
                 isInvalid={ !!errors.main }
