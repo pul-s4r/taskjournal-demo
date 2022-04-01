@@ -4,6 +4,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 const contractinstSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   contractdefId: { type: ObjectId, required: true },
+  contractdefName: { type: String, required: true }, 
   networkId: { type: Number, required: true },
   providerUrl: { type: String, required: true },
   address: { type: String, required: true },

@@ -18,10 +18,11 @@ import {
   checkAuth
 } from '../store/utils.js';
 
-function createInstance(name, contractdefId, networkId, providerUrl, address, owner) {
+function createInstance(name, contractdefId, contractdefName, networkId, providerUrl, address, owner) {
   return new ContractInst({
     name,
     contractdefId,
+    contractdefName,
     networkId,
     providerUrl,
     address,
@@ -30,9 +31,11 @@ function createInstance(name, contractdefId, networkId, providerUrl, address, ow
   }).save();
 }
 
-contractinstController.get("/:email", checkAuth, async (req, res) => {
+contractinstController.get("/", checkAuth, async (req, res) => {
   try {
-    const { email } = req.params;
+    const jwt = jwt_decode(extractJwtFromBearer(req));
+    const email = jwt.email;
+
     const user = await User.findOne({ email });
     const id = user.id;
     ContractInst.find({owner: id}, (err, result) => {
@@ -77,11 +80,12 @@ contractinstController.post("/deploy", checkAuth, async (req, res) => {
 
     const contract = await ContractDef.findById(contractdefId);
     deployer.initContractDef({ abi: contract.abi, bytecode: contract.bytecode });
+    const contractdefName = contract.name; 
     const instance = await deployer.deploy();
 
     const networkId = await deployer.web3.eth.net.getId();
 
-    const newInst = await createInstance(name, contractdefId, networkId, instance.currentProvider.host, instance.options.address, ownerId);
+    const newInst = await createInstance(name, contractdefId, contractdefName, networkId, instance.currentProvider.host, instance.options.address, ownerId);
     const userUpdate = await User.updateOne({_id: ownerId}, {
       $push: {"content.contractInstances": newInst.id}
     }, {upsert: true});
