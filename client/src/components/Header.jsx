@@ -22,13 +22,11 @@ const publicNavBarLinks = [
 
 const privateNavBarLinksOwner = [
   { href: "/", name: "Home" },
-  { href: "/owner", name: "Edit Contract" },
   { href: "/contracts", name: "Manage and Deploy" },
 ];
 
 const privateNavBarLinksContractor = [
   { href: "/", name: "Home" },
-  { href: "/contractor", name: "Manage Contract" },
 ];
 
 const Header = (props) => {
