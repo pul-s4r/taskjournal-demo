@@ -2,22 +2,20 @@ import React, { useState, useEffect } from 'react';
 
 import { Container, Row, Col } from 'react-bootstrap';
 
-import Header from '../components/Header.jsx';
-import TaskTable from '../components/TaskTable.jsx';
-import TaskEditForm from '../components/TaskEditForm.jsx';
-import TaskCompleteForm from '../components/TaskCompleteForm.jsx';
-import TaskPayStatus from '../components/TaskPayStatus.jsx';
-import TaskReleaseForm from '../components/TaskReleaseForm.jsx';
+import TaskTable from './components/TaskTable.jsx';
+import TaskEditForm from './components/TaskEditForm.jsx';
+import TaskCompleteForm from './components/TaskCompleteForm.jsx';
+import TaskPayStatus from './components/TaskPayStatus.jsx';
+import TaskReleaseForm from './components/TaskReleaseForm.jsx';
 
-import { TaskDataProvider } from '../contexts/TaskDataContext.js';
-import { PaymentDataProvider } from '../contexts/PaymentDataContext';
+import { TaskDataProvider } from './contexts/TaskDataContext.js';
+import { PaymentDataProvider } from './contexts/PaymentDataContext';
 
 const JobManager = (props) => {
   const [title, setTitle] = React.useState("Home");
 
   return (
     <Container>
-      <Header/>
       <h1>Contractor View</h1>
       <TaskDataProvider>
         <TaskTable isManager={false}/>
