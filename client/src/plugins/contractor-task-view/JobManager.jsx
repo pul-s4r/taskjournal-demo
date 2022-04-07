@@ -9,7 +9,7 @@ import TaskPayStatus from './components/TaskPayStatus.jsx';
 import TaskReleaseForm from './components/TaskReleaseForm.jsx';
 
 import { TaskDataProvider } from './contexts/TaskDataContext.js';
-import { PaymentDataProvider } from './contexts/PaymentDataContext';
+import { PaymentDataProvider } from './contexts/PaymentDataContext.js';
 
 const JobManager = (props) => {
   const [title, setTitle] = React.useState("Home");
