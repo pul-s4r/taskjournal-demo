@@ -22,6 +22,7 @@ const publicNavBarLinks = [
 
 const privateNavBarLinksOwner = [
   { href: "/", name: "Home" },
+  { href: "/manage", name: "Interact" },
   { href: "/contracts", name: "Manage and Deploy" },
 ];
 
