@@ -57,6 +57,26 @@ const ContractAPI = {
       });
     return result;
   },
+  getContractABI: (cdefId) => {
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Utils.getToken()}`,
+      }
+    };
+    var result = fetch(`${serverurl}${`/contract/definition/abi/${cdefId}`}`, options)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error(`Error in call to get contract ABI: ${res.json()}`);
+        }
+      })
+      .catch((error) => {
+        console.warn(`API_ERROR: ${error}`);
+      });
+    return result;
+  },
   deleteContractDef: (cdefId) => {
     const options = {
       method: "DELETE",
@@ -89,7 +109,6 @@ const ContractAPI = {
     };
     var result = fetch(`${serverurl}${"/contract/instance"}`, options)
       .then((res) => {
-        console.log(res);
         if (res.ok) {
           return res.json();
         } else {
