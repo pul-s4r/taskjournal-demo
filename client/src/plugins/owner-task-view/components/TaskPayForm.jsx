@@ -2,14 +2,15 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Form, Button, Badge } from 'react-bootstrap';
 import { ethers } from 'ethers';
 
-import TaskAPI from '../api/taskAPI.js';
+import { ContractContext } from '../contexts/ContractContext.js';
 import { PaymentDataContext, PaymentDataDispatchContext } from '../contexts/PaymentDataContext.js';
-import { AuthContext } from '../contexts/AuthContext.js';
 
 const TaskPayForm = (props) => {
   const paymentData = useContext(PaymentDataContext);
   const setPaymentData = useContext(PaymentDataDispatchContext);
-  const { authData, web3Provider, address, balance, signer } = useContext(AuthContext);
+  const { authData, web3Provider, address, balance, signer } = props;
+
+  const contract = useContext(ContractContext);
 
   const [formData, setFormData] = useState({
     amount: "",
@@ -27,7 +28,7 @@ const TaskPayForm = (props) => {
   }, []);
 
   const handleButtonFinalise = () => {
-    TaskAPI.finalise().then((data) => {
+    contract.finalise().then((data) => {
     });
     handleFormRefresh();
   };
@@ -50,24 +51,27 @@ const TaskPayForm = (props) => {
   };
 
   const handleFormRefresh = () => {
-    console.log("Refresh called");
-    Promise.all([
-      TaskAPI.isFinalised().then(data => data.payload), TaskAPI.getAmountPayable().then(data => data.payload),
-      TaskAPI.getContract().then(data => data.payload),
-      TaskAPI.getContractBalance().then(data => data.payload)
-    ])
-      .then((values) => {
-        console.log("ContractBalance: ", values[3]);
-          setPaymentData(
-          {... paymentData,
-            finalised: values[0],
-            amountPayable: values[1]
-          });
-          console.log("Address: ", values[2])
-          setDisplayOptions({...displayOptions, ownerBalance: (authData.accountType === "OWNER" ? balance : "N/A (not owner)"), contractBalance: values[3], contractAddress: values[2]});
+    const hasMethods = ['isFinalised', 'getAmountPayable', 'getContract', 'getContractBalance'].map(method => contract.hasOwnProperty(method));
+    if (hasMethods.every(status => status === true)) {
+      Promise.all([
+        contract.isFinalised().then(data => data),
+        contract.getAmountPayable().then(data => data),
+        contract.getContract().then(data => data),
+        contract.getContractBalance().then(data => data)
+      ])
+        .then((values) => {
+          console.log("ContractBalance: ", values[3]);
+            setPaymentData(
+            {... paymentData,
+              finalised: values[0],
+              amountPayable: values[1]
+            });
+            console.log("Address: ", values[2])
+            setDisplayOptions({...displayOptions, ownerBalance: (authData.accountType === "OWNER" ? balance : "N/A (not owner)"), contractBalance: values[3], contractAddress: values[2]});
 
-        }
-      );
+          }
+        );
+    }
   };
 
   const handleFormClear = () => {

@@ -6,6 +6,7 @@ import TaskTable from './components/TaskTable.jsx';
 import TaskPayForm from './components/TaskPayForm.jsx';
 import TaskAddForm from './components/TaskAddForm.jsx';
 
+import { ContractProvider } from './contexts/ContractContext.js';
 import { TaskDataProvider } from './contexts/TaskDataContext.js';
 import { PaymentDataProvider } from './contexts/PaymentDataContext.js';
 
@@ -15,6 +16,7 @@ const JobView = (props) => {
   return (
     <Container>
       <h1>Owner View</h1>
+      <ContractProvider>
       <TaskDataProvider>
         <TaskTable isManager={true}/>
           <Row>
@@ -28,6 +30,7 @@ const JobView = (props) => {
             </Col>
           </Row>
       </TaskDataProvider>
+    </ContractProvider>
     </Container>
   );
 };

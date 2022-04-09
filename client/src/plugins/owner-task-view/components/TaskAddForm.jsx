@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Form, Button, Badge } from 'react-bootstrap';
-import TaskAPI from '../api/taskAPI.js';
+import { ContractContext } from '../contexts/ContractContext.js';
 
 const TaskAddForm = (props) => {
   const [formData, setFormData] = useState({
@@ -12,10 +12,19 @@ const TaskAddForm = (props) => {
     status: "Pending",
   });
 
+  const contract = useContext(ContractContext);
+
   const handleFormSubmit = () => {
-    TaskAPI.createTask(formData.name, formData.desc, formData.due, formData.fee).then((payload) => {
-      setDisplayOptions({...displayOptions, status: payload.status});
-    });
+    if (contract.hasOwnProperty('createTask')) {
+      let due = new Date(formData.due);
+      due = Math.floor(due.getTime()/1000);
+      contract.createTask(formData.name, formData.desc, due, formData.fee).then((payload) => {
+        setDisplayOptions({...displayOptions, status: "Success"});
+      })
+      .catch((error) => {
+        setDisplayOptions({...displayOptions, status: "Error"});
+      });
+    }
   };
 
   const handleFormClear = () => {
