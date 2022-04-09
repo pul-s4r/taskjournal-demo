@@ -7,6 +7,7 @@ import HomeScreen from './screens/HomeScreen.jsx';
 import LoginScreen from './screens/LoginScreen.jsx';
 import RegisterScreen from './screens/RegisterScreen.jsx';
 import DeployerScreen from './screens/DeployerScreen.jsx';
+import ManageScreen from './screens/ManageScreen.jsx';
 import { AuthProvider } from './contexts/AuthContext.js';
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
                 <Route path="/login" element={<LoginScreen/>}/>
                 <Route path="/register" element={<RegisterScreen/>}/>
                 <Route path="/contracts" element={<DeployerScreen/>}/>
+                <Route path="/manage" element={<ManageScreen/>}/>
             </Routes>
         </BrowserRouter>
       </AuthProvider>
