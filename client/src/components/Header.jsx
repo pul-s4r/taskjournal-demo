@@ -28,6 +28,7 @@ const privateNavBarLinksOwner = [
 
 const privateNavBarLinksContractor = [
   { href: "/", name: "Home" },
+  { href: "/manage", name: "Interact" },
 ];
 
 const Header = (props) => {

@@ -5,6 +5,7 @@ import { ContractContext } from '../contexts/ContractContext.js';
 import { AuthContext } from '../contexts/AuthContext.js';
 
 import JobView from '../plugins/owner-task-view/JobView.jsx';
+import JobManager from '../plugins/contractor-task-view/JobManager.jsx';
 
 import ContractAPI from '../api/contractAPI.js';
 
@@ -13,7 +14,7 @@ const ownerTemplateMap = {
 };
 
 const contractorTemplateMap = {
-  "TaskJournal": (<h1>Coming soon</h1>),
+  "TaskJournal": (props) => {return (<JobManager {...props}/>)},
 };
 
 const TemplateProvider = ({ children }) => {
