@@ -52,7 +52,7 @@ const ContractTemplateSelector = (props) => {
       setErrors(newErrors);
     } else {
       const contractinst = initialiseManual(formData.contractdefName, formData.address, formData.contractdefId).then((instance) => {
-        console.log("CI: ", instance); 
+        // console.log("CI: ", instance);
       });
     }
   };

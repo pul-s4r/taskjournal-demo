@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { Container, Row, Col } from 'react-bootstrap';
 
@@ -6,9 +6,9 @@ import Header from '../components/Header.jsx';
 import ContractTemplateSelector from '../components/ContractTemplateSelector.jsx';
 
 import { ContractInstDataProvider } from '../contexts/ContractInstDataContext.js';
-import { ContractProvider } from '../contexts/ContractContext.js';
+import { ContractProvider, ContractContext } from '../contexts/ContractContext.js';
 
-import JobView from '../plugins/owner-task-view/JobView.jsx';
+import TemplateProvider from '../components/TemplateProvider.jsx';
 
 const ManageScreen = (props) => {
 
@@ -24,7 +24,7 @@ const ManageScreen = (props) => {
           <ContractTemplateSelector />
         </Row>
         <Row className="justify-content-center">
-          
+          <TemplateProvider></TemplateProvider>
         </Row>
       </ContractInstDataProvider>
     </ContractProvider>
