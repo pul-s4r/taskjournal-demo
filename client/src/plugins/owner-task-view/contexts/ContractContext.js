@@ -4,10 +4,10 @@ const ContractContext = createContext(undefined);
 const ContractDispatchContext = createContext(undefined);
 
 const ContractProvider = ({ children }) => {
-  const [Contract, setContract] = useState({});
+  const [contract, setContract] = useState({});
 
   return (
-    <ContractContext.Provider value={Contract}>
+    <ContractContext.Provider value={contract}>
       <ContractDispatchContext.Provider value={setContract}>
         {children}
       </ContractDispatchContext.Provider>
