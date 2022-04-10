@@ -9,7 +9,7 @@ import JobView from '../plugins/owner-task-view/JobView.jsx';
 import ContractAPI from '../api/contractAPI.js';
 
 const ownerTemplateMap = {
-  "TaskJournal": (<JobView />),
+  "TaskJournal": (props) => {return (<JobView {...props}/>)},
 };
 
 const contractorTemplateMap = {
@@ -17,23 +17,26 @@ const contractorTemplateMap = {
 };
 
 const TemplateProvider = ({ children }) => {
-  const { authData } = useContext(AuthContext);
+  const { authData, web3Provider, address, balance, signer } = useContext(AuthContext);
   const { contract, contractdefName } = useContext(ContractContext);
 
   const templateMap = authData.accountType === "OWNER" ? ownerTemplateMap
     : contractorTemplateMap;
 
-  // console.log("Contract name: ", contractdefName);
-  // console.log("Contract: ", contract);
-
   const templateSwitcher = (
     templateMap.hasOwnProperty(contractdefName) ?
     (
       <Container>
-        {templateMap[contractdefName]}
+        {templateMap[contractdefName]({
+          contract,
+          authContext: {authData, web3Provider, address, balance, signer}
+        })}
       </Container>
     )
-    : (<p>Please select a template</p>)
+    : (<Container>
+        <Row><h1>Pending</h1></Row>
+        <Row>Please select a valid template</Row>
+      </Container>)
   );
 
   return templateSwitcher;

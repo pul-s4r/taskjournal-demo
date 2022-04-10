@@ -19,9 +19,9 @@ const ContractProvider = ({ children }) => {
     setContract(contractinst);
   };
 
-  const initialiseManual = (cdefName, addr, cdefId) => {
+  const initialiseManual = (cdefName, addr, cdefId, signer=null) => {
     return Promise.all([
-      generateProvider(),
+      signer !== null && signer !== undefined ? signer : generateProvider(),
       ContractAPI.getContractABI(cdefId),
     ])
     .then((values) => {

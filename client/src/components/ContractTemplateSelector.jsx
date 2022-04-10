@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Table, Button, Form } from 'react-bootstrap';
 
+import { AuthContext } from '../contexts/AuthContext.js';
 import { ContractInstDataContext, ContractInstDataDispatchContext } from '../contexts/ContractInstDataContext.js';
 import { ContractContext, ContractDispatchContext } from '../contexts/ContractContext.js';
 
@@ -18,6 +19,8 @@ const ContractTemplateSelector = (props) => {
   const [show, setShow] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
   const [errors, setErrors] = useState({});
+
+  const { signer } = useContext(AuthContext);
 
   const contractInstData = useContext(ContractInstDataContext);
   const setContractInstData = useContext(ContractInstDataDispatchContext);
@@ -51,7 +54,7 @@ const ContractTemplateSelector = (props) => {
     if ( Object.keys(newErrors).length > 0 ) {
       setErrors(newErrors);
     } else {
-      const contractinst = initialiseManual(formData.contractdefName, formData.address, formData.contractdefId).then((instance) => {
+      const contractinst = initialiseManual(formData.contractdefName, formData.address, formData.contractdefId, signer).then((instance) => {
         // console.log("CI: ", instance);
       });
     }
