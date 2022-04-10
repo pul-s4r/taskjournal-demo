@@ -2,16 +2,18 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Table, Button, ToggleButtonGroup, ToggleButton } from 'react-bootstrap';
 import { formatDate } from '../utils/utils.js';
 
+import { ethers } from 'ethers';
 import { ContractContext } from '../contexts/ContractContext.js';
 import { TaskDataContext, TaskDataDispatchContext } from '../contexts/TaskDataContext.js';
 
 const TaskTable = (props) => {
-  const { isManager } = props;
+  const { isManager, contract } = props;
 
-  const contract = useContext(ContractContext);
+  // const contract = useContext(ContractContext);
 
   const taskData = useContext(TaskDataContext);
   const setTaskData = useContext(TaskDataDispatchContext);
+  const [taskCom, setTaskCom] = useState([]);
 
   const [displayOptions, setDisplayOptions] = useState({
     showCompleted: true,
@@ -37,15 +39,15 @@ const TaskTable = (props) => {
           return Promise.all([Promise.all(taskList), Promise.all(taskCom)]);
         })
         .then((tasks) => {
-          const taskList = tasks[0];
-          const taskCom = tasks[1];
-          taskList.forEach((task, idx) => {taskList[idx]['6'] = taskCom[idx]});
+          var taskList = tasks[0];
+          var taskCom = tasks[1];
+          // taskList.forEach((task, idx) => {taskList[idx].push(taskCom[idx])});
+          resolve([taskList, taskCom]);
           return taskList;
         })
         .catch((error) => {
           return [];
         });
-        resolve(taskList);
       } else {
         reject([]);
       }
@@ -55,7 +57,9 @@ const TaskTable = (props) => {
 
   const handleTaskDataUpdate = () => {
     contractGetTasks().then((newData) => {
-      setTaskData(newData.payload);
+      // console.log("ND: ", newData);
+      setTaskData(newData[0]);
+      setTaskCom(newData[1]);
     });
   };
 
@@ -122,15 +126,15 @@ const TaskTable = (props) => {
           {
             typeof taskData !== 'undefined' && Array.isArray(taskData) && taskData.length ?
               taskData.filter((task) => displayOptions.showCompleted === true ? task : (task['6'] === false ? task : undefined)
-            ).map((task) => (
-                <tr key={`taskData${task['0']}`}>
-                  <th>{task['0']}</th>
-                  <th>{task['1']}</th>
-                  <th>{task['2']}</th>
-                  <th>{formatDate(Number(`0x${task['3']}`))}</th>
-                  <th>{formatDate(Number(`0x${task['4']}`))}</th>
-                  <th>{Number(`0x${task['5']}`)}</th>
-                  <th>{task['6'] === true ? "Yes" : "No"}</th>
+            ).map((task, idx) => {return (
+                <tr key={`taskData${task[0]}`}>
+                  <th>{task[0].toNumber()}</th>
+                  <th>{task[1]}</th>
+                  <th>{task[2]}</th>
+                  <th>{formatDate(task[3].toNumber())}</th>
+                  <th>{formatDate(task[4].toNumber())}</th>
+                  <th>{task[5].toNumber()}</th>
+                  <th>{taskCom[idx] === true ? "Yes" : "No"}</th>
                   {isManager ? (
                     <th>
                       <Button variant="outline-danger">
@@ -139,12 +143,13 @@ const TaskTable = (props) => {
                     </th>
                   ) : <th>{' '}</th>}
                 </tr>
-              )
+              )}
             )
             : <tr>
               <td></td>
               <td></td>
               <td scope="row">No tasks to display</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

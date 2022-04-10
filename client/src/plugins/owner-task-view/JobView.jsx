@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { Container, Row, Col } from 'react-bootstrap';
 
@@ -12,20 +12,22 @@ import { PaymentDataProvider } from './contexts/PaymentDataContext.js';
 
 const JobView = (props) => {
   const [title, setTitle] = React.useState("Home");
+  const { contract, authContext } = props;
+  const { authData, web3Provider, address, balance, signer } = authContext;
 
   return (
     <Container>
       <h1>Owner View</h1>
       <ContractProvider>
       <TaskDataProvider>
-        <TaskTable isManager={true}/>
+        <TaskTable isManager={true} contract={contract}/>
           <Row>
             <Col>
-              <TaskAddForm />
+              <TaskAddForm contract={contract} authContext={authContext}/>
             </Col>
             <Col>
               <PaymentDataProvider>
-                <TaskPayForm />
+                <TaskPayForm contract={contract} authContext={authContext}/>
               </PaymentDataProvider>
             </Col>
           </Row>

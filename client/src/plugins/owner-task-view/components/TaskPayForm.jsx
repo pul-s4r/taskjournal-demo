@@ -8,9 +8,11 @@ import { PaymentDataContext, PaymentDataDispatchContext } from '../contexts/Paym
 const TaskPayForm = (props) => {
   const paymentData = useContext(PaymentDataContext);
   const setPaymentData = useContext(PaymentDataDispatchContext);
-  const { authData, web3Provider, address, balance, signer } = props;
+  const { authContext } = props;
+  const { authData, web3Provider, address, balance, signer } = authContext;
 
-  const contract = useContext(ContractContext);
+  // const contract = useContext(ContractContext);
+  const { contract } = props;
 
   const [formData, setFormData] = useState({
     amount: "",

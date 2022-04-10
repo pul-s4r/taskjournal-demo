@@ -7,12 +7,14 @@ const TaskAddForm = (props) => {
     name: "",
     desc: "",
     due:  "",
+    fee: 0,
   });
   const [displayOptions, setDisplayOptions] = useState({
     status: "Pending",
   });
 
-  const contract = useContext(ContractContext);
+  // const contract = useContext(ContractContext);
+  const { contract, authContext } = props;
 
   const handleFormSubmit = () => {
     if (contract.hasOwnProperty('createTask')) {
@@ -23,6 +25,7 @@ const TaskAddForm = (props) => {
       })
       .catch((error) => {
         setDisplayOptions({...displayOptions, status: "Error"});
+        console.warn("E: ", error);
       });
     }
   };
