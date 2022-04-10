@@ -21,24 +21,17 @@ const ContractTemplateSelector = (props) => {
 
   const contractInstData = useContext(ContractInstDataContext);
   const setContractInstData = useContext(ContractInstDataDispatchContext);
-  const { contract, address, provider, abi } = useContext(ContractContext);
-  const { initialise, setAddress, generateProvider, fetchAndSetABI } = useContext(ContractDispatchContext);
+  const { contract, address, provider, abi, contractdefName } = useContext(ContractContext);
+  const { initialise, initialiseManual, setAddress, setContractdefName, generateProvider, fetchAndSetABI } = useContext(ContractDispatchContext);
 
   const handleContractInstDataUpdate = () => {
     ContractAPI.getContractInsts().then((newData) => {
-      // console.log(newData.data);
       setContractInstData(newData.data);
     });
   };
 
   const initContractObject = async () => {
-    await setAddress(formData.address);
-    await generateProvider();
-    console.log("Provider: ", provider);
-    await fetchAndSetABI(formData.contractdefId);
-    console.log("ABI: ", abi);
-    await initialise();
-    console.log("Contract: ", contract); 
+
   };
 
   useEffect(() => {
@@ -58,7 +51,9 @@ const ContractTemplateSelector = (props) => {
     if ( Object.keys(newErrors).length > 0 ) {
       setErrors(newErrors);
     } else {
-      initContractObject();
+      const contractinst = initialiseManual(formData.contractdefName, formData.address, formData.contractdefId).then((instance) => {
+        console.log("CI: ", instance); 
+      });
     }
   };
 

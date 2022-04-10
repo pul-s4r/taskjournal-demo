@@ -12,10 +12,33 @@ const ContractProvider = ({ children }) => {
   const [address, setAddress] = useState("");
   const [provider, setProvider] = useState({});
   const [abi, setAbi] = useState({});
+  const [contractdefName, setContractdefName] = useState("");
 
   const initialise = () => {
-    const contractinst = new ethers.Contract(address, abi, provider); 
+    const contractinst = new ethers.Contract(address, abi, provider);
     setContract(contractinst);
+  };
+
+  const initialiseManual = (cdefName, addr, cdefId) => {
+    return Promise.all([
+      generateProvider(),
+      ContractAPI.getContractABI(cdefId),
+    ])
+    .then((values) => {
+      values[1] = values[1].data;
+      return values;
+    })
+    .then((values) => {
+      setContractdefName(cdefName);
+      setAddress(addr);
+      const contractinst = new ethers.Contract(addr, values[1], values[0]);
+      setContract(contractinst);
+      return contractinst;
+    })
+    .catch((error) => {
+      console.warn("Error provisioning contract instance", error);
+      return null;
+    });
   };
 
   const generateProvider = (type = "") => {
@@ -28,7 +51,7 @@ const ContractProvider = ({ children }) => {
       default:
         provider = ethers.getDefaultProvider();
     }
-    setProvider(provider);
+    return provider;
   };
 
   const fetchAndSetABI = (cdefId) => {
@@ -43,13 +66,16 @@ const ContractProvider = ({ children }) => {
       address,
       provider,
       abi,
+      contractdefName,
     }}>
       <ContractDispatchContext.Provider value={{
         setContract,
         setAddress,
         setProvider,
         setAbi,
+        setContractdefName,
         initialise,
+        initialiseManual,
         generateProvider,
         fetchAndSetABI
       }}>
