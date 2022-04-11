@@ -1,3 +1,5 @@
+import Utils from './utils.js';
+
 const serverurl = 'http://localhost:8000';
 
 const UserAPI = {
@@ -31,7 +33,7 @@ const UserAPI = {
       body: JSON.stringify({
         "email": email,
         "password": password,
-        "accountType": accountType, 
+        "accountType": accountType,
       }),
     };
 
@@ -44,6 +46,26 @@ const UserAPI = {
       });
     return result;
   },
+  get: () => {
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Utils.getToken()}`,
+      }
+    };
+    var result = fetch(`${serverurl}${`/auth`}`, options)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error(`Error in call to get users: ${res.json()}`);
+        }
+      })
+      .catch((error) => {
+        console.warn(`API_ERROR: ${error}`);
+      });
+    return result;
+  }
 };
 
 export default UserAPI;

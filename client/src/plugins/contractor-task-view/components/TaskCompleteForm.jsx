@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Form, Button, Badge } from 'react-bootstrap';
-import TaskAPI from '../api/taskAPI.js';
 
 import { TaskDataContext } from '../contexts/TaskDataContext.js';
 
 const TaskCompleteForm = (props) => {
+  const { contract } = props;
   const taskData = useContext(TaskDataContext);
   const [displayOptions, setDisplayOptions] = useState({
     status: "Pending",
@@ -17,9 +17,12 @@ const TaskCompleteForm = (props) => {
 
   const handleFormSubmit = () => {
     console.log("Sending", formData);
-    TaskAPI.completeTask(formData.id, formData.reason).then((payload) => {
+    contract.markComplete(formData.id, formData.reason).then((payload) => {
       console.log("Got: ", payload);
-      setDisplayOptions({...displayOptions, status: typeof payload !== 'undefined' && 'status' in payload ? payload.status : "Error"});
+      setDisplayOptions({...displayOptions, status: typeof payload !== 'undefined' ? "Success" : "Error"});
+    }).catch((error) => {
+      setDisplayOptions({...displayOptions, status: "Error"});
+      console.warn("Error marking task complete: ", error); 
     });
   };
 
@@ -54,7 +57,7 @@ const TaskCompleteForm = (props) => {
               >
               {
                 Array.isArray(taskData) && taskData.length ? taskData.map((task) => typeof task[0] !== 'undefined' ? (
-                  <option key={'inputTaskId' + task[0]}>{task[0]}</option>
+                  <option key={'inputTaskId' + task[0].toNumber()}>{task[0].toNumber()}</option>
                 ) : <option>Undefined</option>)
                 : <option key={"inputTaskBlank"}></option>
               }
