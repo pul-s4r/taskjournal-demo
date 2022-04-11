@@ -13,28 +13,29 @@ import { PaymentDataProvider } from './contexts/PaymentDataContext.js';
 
 const JobManager = (props) => {
   const [title, setTitle] = React.useState("Home");
+  const { contract } = props;
 
   return (
     <Container>
       <h1>Contractor View</h1>
       <TaskDataProvider>
-        <TaskTable isManager={false}/>
+        <TaskTable isManager={false} contract={contract}/>
         <Row>
           <Col>
-            <TaskCompleteForm />
+            <TaskCompleteForm contract={contract}/>
           </Col>
           <Col>
-            <TaskEditForm />
+            <TaskEditForm contract={contract}/>
           </Col>
         </Row>
         <Row>
           <Col>
             <PaymentDataProvider>
-              <TaskPayStatus />
+              <TaskPayStatus contract={contract}/>
             </PaymentDataProvider>
           </Col>
           <Col>
-            <TaskReleaseForm />
+            <TaskReleaseForm contract={contract}/>
           </Col>
         </Row>
       </TaskDataProvider>

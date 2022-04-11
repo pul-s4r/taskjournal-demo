@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Form, Button, Badge } from 'react-bootstrap';
-import TaskAPI from '../api/taskAPI.js';
 
 import { TaskDataContext } from '../contexts/TaskDataContext.js';
 
 const TaskEditForm = (props) => {
+  const { contract } = props;
   const taskData = useContext(TaskDataContext);
   const [displayOptions, setDisplayOptions] = useState({
     status: "Pending",
@@ -18,8 +18,10 @@ const TaskEditForm = (props) => {
 
   const handleFormSubmit = () => {
     console.log("Sending", formData);
-    TaskAPI.delayTask(formData.id, formData.numDays, formData.reason).then((payload) => {
-      setDisplayOptions({...displayOptions, status: payload.status});
+    contract.delayTaskByDays(formData.id, formData.numDays, formData.reason).then((payload) => {
+      setDisplayOptions({...displayOptions, status: "Success"});
+    }).catch((error) => {
+      setDisplayOptions({...displayOptions, status: "Error"});
     });
   };
 
@@ -55,7 +57,7 @@ const TaskEditForm = (props) => {
               >
               {
                 Array.isArray(taskData) && taskData.length ? taskData.map((task) => typeof task[0] !== 'undefined' ? (
-                  <option key={'inputTaskId' + task[0]}>{task[0]}</option>
+                  <option key={'inputTaskId' + task[0].toNumber()}>{task[0].toNumber()}</option>
                 ) : <option>Undefined</option>)
                 : <option key={"inputTaskBlank"}></option>
               }
