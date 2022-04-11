@@ -34,7 +34,7 @@ function createInstance(name, contractdefId, contractdefName, networkId, provide
 contractinstController.get("/:email?", checkAuth, async (req, res) => {
   try {
     const jwt = jwt_decode(extractJwtFromBearer(req));
-    const email = req.params.hasOwnProperty('email') ? req.params.email : jwt.email;
+    const email = req.params['email'] ? req.params.email : jwt.email;
 
     const user = await User.findOne({ email });
     const id = user.id;
