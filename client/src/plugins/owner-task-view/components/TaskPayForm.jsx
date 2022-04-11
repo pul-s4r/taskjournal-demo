@@ -30,7 +30,10 @@ const TaskPayForm = (props) => {
   }, []);
 
   const handleButtonFinalise = () => {
-    contract.finalise().then((data) => {
+    contract.markFinalised().then((data) => {
+
+    }).catch((error) => {
+      console.warn("Error marking contract finalised: ", error);
     });
     handleFormRefresh();
   };
@@ -53,13 +56,13 @@ const TaskPayForm = (props) => {
   };
 
   const handleFormRefresh = () => {
-    const hasMethods = ['isFinalised', 'getAmountPayable', 'getContract', 'getContractBalance'].map(method => contract.hasOwnProperty(method));
+    const hasMethods = ['isFinalised', 'sumFeeCompleted', 'address', 'getContractBalance'].map(method => contract.hasOwnProperty(method));
     if (hasMethods.every(status => status === true)) {
       Promise.all([
-        contract.isFinalised().then(data => data),
-        contract.getAmountPayable().then(data => data),
-        contract.getContract().then(data => data),
-        contract.getContractBalance().then(data => data)
+        contract.isFinalised(),
+        contract.sumFeeCompleted(),
+        contract.address,
+        contract.getBalance()
       ])
         .then((values) => {
           console.log("ContractBalance: ", values[3]);
@@ -118,7 +121,7 @@ const TaskPayForm = (props) => {
             </Form.Label>
           </Col>
           <Col sm={8} md={8} className="text-center">
-            {Number(`0x${displayOptions.contractBalance}`).toFixed(5)}
+            {Number(displayOptions.contractBalance).toFixed(5)}
           </Col>
           <Col sm={4}>
             <Form.Label>
