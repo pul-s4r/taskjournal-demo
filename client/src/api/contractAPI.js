@@ -100,14 +100,14 @@ const ContractAPI = {
       });
     return result;
   },
-  getContractInsts: () => {
+  getContractInsts: (email = "") => {
     const options = {
       method: "GET",
       headers: {
         Authorization: `Bearer ${Utils.getToken()}`,
       }
     };
-    var result = fetch(`${serverurl}${"/contract/instance"}`, options)
+    var result = fetch(`${serverurl}${`/contract/instance${email ? "/" + email : ""}`}`, options)
       .then((res) => {
         if (res.ok) {
           return res.json();

@@ -6,6 +6,7 @@ import { ContractInstDataContext, ContractInstDataDispatchContext } from '../con
 import { ContractContext, ContractDispatchContext } from '../contexts/ContractContext.js';
 
 import ContractAPI from '../api/contractAPI.js';
+import UserAPI from '../api/userAPI.js';
 
 const initialFormData = {
   template: "",
@@ -13,14 +14,17 @@ const initialFormData = {
   provider: "",
   contractdefId: "",
   contractdefName: "",
+  email: "",
+  emailInput: "",
 };
 
 const ContractTemplateSelector = (props) => {
   const [show, setShow] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
+  const [emails, setEmails] = useState([]);
   const [errors, setErrors] = useState({});
 
-  const { signer } = useContext(AuthContext);
+  const { authData, signer } = useContext(AuthContext);
 
   const contractInstData = useContext(ContractInstDataContext);
   const setContractInstData = useContext(ContractInstDataDispatchContext);
@@ -28,10 +32,21 @@ const ContractTemplateSelector = (props) => {
   const { initialise, initialiseManual, setAddress, setContractdefName, generateProvider, fetchAndSetABI } = useContext(ContractDispatchContext);
 
   const handleContractInstDataUpdate = () => {
-    ContractAPI.getContractInsts().then((newData) => {
+    ContractAPI.getContractInsts(formData.emailInput ? formData.emailInput : "").then((newData) => {
       setContractInstData(newData.data);
     });
   };
+
+  const handleEmailUpdate = () => {
+    UserAPI.get().then((emails) => {
+      setEmails(emails.data.map(item => item.email));
+    });
+  };
+
+  useEffect(() => {
+    handleEmailUpdate();
+    handleContractInstDataUpdate();
+  }, [formData.emailInput]);
 
   const initContractObject = async () => {
 
@@ -60,6 +75,20 @@ const ContractTemplateSelector = (props) => {
     }
   };
 
+  const contractUserSelector = (
+    <Form.Group className="mb-3" controlId="deployForm.Email">
+    <Form.Label>Deployments from User</Form.Label>
+    <Form.Select
+      onClick={(e) => {
+        setFormData({... formData, emailInput: e.target.value});
+      }}
+    >
+      {emails && Array.isArray(emails) ? emails.map((entry) => {
+        return (<option key={`email-${entry}`}>{entry}</option>)
+      }) : (<option>{"email"}</option>)}
+    </Form.Select>
+  </Form.Group>)
+
   const findErrors = () => {
     const { template, address, provider, abi } = formData;
     const newErrors = {};
@@ -70,6 +99,7 @@ const ContractTemplateSelector = (props) => {
   return (
     <Container>
       <Form noValidate validated={false}>
+        {authData.accountType === "CONTRACTOR" ? contractUserSelector : <></>}
         <Form.Group className="mb-3" controlId="templateForm.Template">
           <Form.Label>Template</Form.Label>
           <Form.Select
