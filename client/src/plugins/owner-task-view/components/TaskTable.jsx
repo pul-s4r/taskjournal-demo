@@ -3,13 +3,14 @@ import { Container, Row, Col, Table, Button, ToggleButtonGroup, ToggleButton } f
 import { formatDate } from '../utils/utils.js';
 
 import { ethers } from 'ethers';
-import { ContractContext } from '../contexts/ContractContext.js';
+import { ContractContext, ContractDispatchContext } from '../contexts/ContractContext.js';
 import { TaskDataContext, TaskDataDispatchContext } from '../contexts/TaskDataContext.js';
 
 const TaskTable = (props) => {
-  const { isManager, contract } = props;
+  const { isManager, name, address: addr, abi, provider } = props;
 
-  // const contract = useContext(ContractContext);
+  const { contract } = useContext(ContractContext);
+  const { initialise } = useContext(ContractDispatchContext);
 
   const taskData = useContext(TaskDataContext);
   const setTaskData = useContext(TaskDataDispatchContext);
@@ -24,6 +25,14 @@ const TaskTable = (props) => {
     {name: 'No', value: false},
 
   ];
+
+  useEffect(() => {
+    try {
+      initialise(name, addr, abi, provider);
+    } catch (error) {
+      console.warn("Error initialising contract: ", error);
+    }
+  }, [name, addr, abi, provider]);
 
   const contractGetTasks = () => {
     return new Promise((resolve, reject) => {

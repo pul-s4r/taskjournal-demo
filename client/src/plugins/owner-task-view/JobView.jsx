@@ -12,22 +12,27 @@ import { PaymentDataProvider } from './contexts/PaymentDataContext.js';
 
 const JobView = (props) => {
   const [title, setTitle] = React.useState("Home");
-  const { contract, authContext } = props;
-  const { authData, web3Provider, address, balance, signer } = authContext;
+  const { name, address, abi, provider } = props;
+  const { authData, web3Provider, balance } = props;
 
   return (
     <Container>
       <h1>Owner View</h1>
       <ContractProvider>
       <TaskDataProvider>
-        <TaskTable isManager={true} contract={contract}/>
+        <TaskTable isManager={true}
+          address={address}
+          abi={abi}
+          provider={provider}
+          name={name}
+        />
           <Row>
             <Col>
-              <TaskAddForm contract={contract} authContext={authContext}/>
+              <TaskAddForm authData={authData}/>
             </Col>
             <Col>
               <PaymentDataProvider>
-                <TaskPayForm contract={contract} authContext={authContext}/>
+                <TaskPayForm authData={authData} web3Provider={web3Provider} balance={balance}/>
               </PaymentDataProvider>
             </Col>
           </Row>
