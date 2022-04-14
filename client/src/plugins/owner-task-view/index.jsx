@@ -2,11 +2,21 @@ import plugin from 'js-plugin';
 
 import JobView from './JobView.jsx';
 
-plugin.register({
+const componentName = "TaskJournal";
+const userType = "owner";
+
+const componentPlugin = {
   name: "owner_task_view",
-  component: {
-    processInitOwnerView: (props) => {
-      return (<JobView {...props} />)
-    },
+  component: componentName,
+  [componentName]: {
+    [userType]: {
+      processInit: (props) => {
+        return (<JobView {...props} />)
+      },
+    }
   }
-});
+};
+
+plugin.register(componentPlugin);
+
+export { componentName, userType, componentPlugin };
