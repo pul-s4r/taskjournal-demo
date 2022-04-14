@@ -29,7 +29,7 @@ const contractorTemplateMap = {
 
 const TemplateProvider = ({ children }) => {
   const { authData, web3Provider, address, balance, signer } = useContext(AuthContext);
-  const { contract, contractdefName } = useContext(ContractContext);
+  const { contract, abi, contractdefName } = useContext(ContractContext);
 
   const templateMap = authData.accountType === "OWNER" ? ownerTemplateMap
     : contractorTemplateMap;
@@ -39,8 +39,8 @@ const TemplateProvider = ({ children }) => {
     (
       <Container>
         {templateMap[contractdefName]({
-          contract,
-          authContext: {authData, web3Provider, address, balance, signer}
+          name: contractdefName, address, abi, provider: signer,
+          authData, web3Provider, balance
         })}
       </Container>
     )
