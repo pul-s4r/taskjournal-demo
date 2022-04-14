@@ -13,8 +13,8 @@ const TaskAddForm = (props) => {
     status: "Pending",
   });
 
-  // const contract = useContext(ContractContext);
-  const { contract, authContext } = props;
+  const { contract } = useContext(ContractContext);
+  // const { contract } = props;
 
   const handleFormSubmit = () => {
     if (contract.hasOwnProperty('createTask')) {

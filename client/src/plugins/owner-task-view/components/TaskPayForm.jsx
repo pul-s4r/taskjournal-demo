@@ -8,11 +8,10 @@ import { PaymentDataContext, PaymentDataDispatchContext } from '../contexts/Paym
 const TaskPayForm = (props) => {
   const paymentData = useContext(PaymentDataContext);
   const setPaymentData = useContext(PaymentDataDispatchContext);
-  const { authContext } = props;
-  const { authData, web3Provider, address, balance, signer } = authContext;
+  const { authData, web3Provider, balance } = props;
 
-  // const contract = useContext(ContractContext);
-  const { contract } = props;
+  const { contract, address, provider } = useContext(ContractContext);
+  // const { contract } = props;
 
   const [formData, setFormData] = useState({
     amount: "",
@@ -41,7 +40,7 @@ const TaskPayForm = (props) => {
   const handleFormSubmit = () => {
     // Handle payment from wallet
     console.log("Amount: ", formData.amount);
-    signer.sendTransaction({
+    provider.sendTransaction({
       from: address,
       to: displayOptions.contractAddress,
       value: ethers.utils.parseEther(formData.amount),

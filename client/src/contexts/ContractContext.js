@@ -31,6 +31,7 @@ const ContractProvider = ({ children }) => {
     .then((values) => {
       setContractdefName(cdefName);
       setAddress(addr);
+      setAbi(values[1]); 
       const contractinst = new ethers.Contract(addr, values[1], values[0]);
       setContract(contractinst);
       return contractinst;
