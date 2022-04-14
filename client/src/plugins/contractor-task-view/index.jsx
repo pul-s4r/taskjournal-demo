@@ -1,6 +1,8 @@
+import { lazy, Suspense } from 'react';
 import plugin from 'js-plugin';
 
-import JobManager from './JobManager.jsx';
+// import JobManager from './JobManager.jsx';
+const JobManager = lazy(() => import('./JobManager.jsx'));
 
 const componentName = "TaskJournal";
 const userType = "contractor";
@@ -11,7 +13,11 @@ const componentPlugin = {
   [componentName]: {
     [userType]: {
       processInit: (props) => {
-        return (<JobManager {...props} />)
+        return (
+          <Suspense fallback={<div>Loading...</div>}>
+            <JobManager {...props} />
+          </Suspense>
+        );
       },
     }
   }

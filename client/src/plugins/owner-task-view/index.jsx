@@ -1,6 +1,8 @@
+import { lazy, Suspense } from 'react';
 import plugin from 'js-plugin';
 
-import JobView from './JobView.jsx';
+// import JobView from './JobView.jsx';
+const JobView = lazy(() => import('./JobView.jsx'));
 
 const componentName = "TaskJournal";
 const userType = "owner";
@@ -11,7 +13,11 @@ const componentPlugin = {
   [componentName]: {
     [userType]: {
       processInit: (props) => {
-        return (<JobView {...props} />)
+        return (
+          <Suspense fallback={<div>Loading...</div>}>
+            <JobView {...props} />
+          </Suspense>
+        ); 
       },
     }
   }

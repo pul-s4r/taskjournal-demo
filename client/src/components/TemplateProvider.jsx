@@ -5,8 +5,8 @@ import plugin from 'js-plugin';
 import { ContractContext } from '../contexts/ContractContext.js';
 import { AuthContext } from '../contexts/AuthContext.js';
 
-import * as contractorTaskView from '../plugins/contractor-task-view';
-import * as ownerTaskView from '../plugins/owner-task-view';
+import '../plugins/contractor-task-view';
+import '../plugins/owner-task-view';
 
 // import JobView from '../plugins/owner-task-view/JobView.jsx';
 // import JobManager from '../plugins/contractor-task-view/JobManager.jsx';
