@@ -16,14 +16,14 @@ import ContractAPI from '../api/contractAPI.js';
 const ownerTemplateMap = {
   // "TaskJournal": (props) => {return (<JobView {...props}/>)},
   "TaskJournal": (props) => {
-    return plugin.invoke("component.processInitOwnerView", props);
+    return plugin.invoke("TaskJournal.owner.processInit", props);
   }
 };
 
 const contractorTemplateMap = {
   // "TaskJournal": (props) => {return (<JobManager {...props}/>)},
   "TaskJournal": (props) => {
-    return plugin.invoke("component.processInitContractorView", props);
+    return plugin.invoke("TaskJournal.contractor.processInit", props);
   },
 };
 
