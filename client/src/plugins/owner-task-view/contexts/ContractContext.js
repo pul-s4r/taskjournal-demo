@@ -20,6 +20,7 @@ const ContractProvider = ({ children }) => {
       setAbi(abiInput);
       setProvider(provider);
       setContract(contractinst);
+      resolve(contractinst); 
     });
   }
 
