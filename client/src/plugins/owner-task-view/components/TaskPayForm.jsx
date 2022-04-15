@@ -2,14 +2,16 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Form, Button, Badge } from 'react-bootstrap';
 import { ethers } from 'ethers';
 
-import TaskAPI from '../api/taskAPI.js';
+import { ContractContext } from '../contexts/ContractContext.js';
 import { PaymentDataContext, PaymentDataDispatchContext } from '../contexts/PaymentDataContext.js';
-import { AuthContext } from '../contexts/AuthContext.js';
 
 const TaskPayForm = (props) => {
   const paymentData = useContext(PaymentDataContext);
   const setPaymentData = useContext(PaymentDataDispatchContext);
-  const { authData, web3Provider, address, balance, signer } = useContext(AuthContext);
+  const { authData, web3Provider, balance } = props;
+
+  const { contract, address, provider } = useContext(ContractContext);
+  // const { contract } = props;
 
   const [formData, setFormData] = useState({
     amount: "",
@@ -27,7 +29,10 @@ const TaskPayForm = (props) => {
   }, []);
 
   const handleButtonFinalise = () => {
-    TaskAPI.finalise().then((data) => {
+    contract.markFinalised().then((data) => {
+
+    }).catch((error) => {
+      console.warn("Error marking contract finalised: ", error);
     });
     handleFormRefresh();
   };
@@ -35,7 +40,7 @@ const TaskPayForm = (props) => {
   const handleFormSubmit = () => {
     // Handle payment from wallet
     console.log("Amount: ", formData.amount);
-    signer.sendTransaction({
+    provider.sendTransaction({
       from: address,
       to: displayOptions.contractAddress,
       value: ethers.utils.parseEther(formData.amount),
@@ -50,24 +55,27 @@ const TaskPayForm = (props) => {
   };
 
   const handleFormRefresh = () => {
-    console.log("Refresh called");
-    Promise.all([
-      TaskAPI.isFinalised().then(data => data.payload), TaskAPI.getAmountPayable().then(data => data.payload),
-      TaskAPI.getContract().then(data => data.payload),
-      TaskAPI.getContractBalance().then(data => data.payload)
-    ])
-      .then((values) => {
-        console.log("ContractBalance: ", values[3]);
-          setPaymentData(
-          {... paymentData,
-            finalised: values[0],
-            amountPayable: values[1]
-          });
-          console.log("Address: ", values[2])
-          setDisplayOptions({...displayOptions, ownerBalance: (authData.accountType === "OWNER" ? balance : "N/A (not owner)"), contractBalance: values[3], contractAddress: values[2]});
+    const hasMethods = ['isFinalised', 'sumFeeCompleted', 'address', 'getContractBalance'].map(method => contract.hasOwnProperty(method));
+    if (hasMethods.every(status => status === true)) {
+      Promise.all([
+        contract.isFinalised(),
+        contract.sumFeeCompleted(),
+        contract.address,
+        contract.getBalance()
+      ])
+        .then((values) => {
+          console.log("ContractBalance: ", values[3]);
+            setPaymentData(
+            {... paymentData,
+              finalised: values[0],
+              amountPayable: values[1]
+            });
+            console.log("Address: ", values[2])
+            setDisplayOptions({...displayOptions, ownerBalance: (authData.accountType === "OWNER" ? balance : "N/A (not owner)"), contractBalance: values[3], contractAddress: values[2]});
 
-        }
-      );
+          }
+        );
+    }
   };
 
   const handleFormClear = () => {
@@ -112,7 +120,7 @@ const TaskPayForm = (props) => {
             </Form.Label>
           </Col>
           <Col sm={8} md={8} className="text-center">
-            {Number(`0x${displayOptions.contractBalance}`).toFixed(5)}
+            {Number(displayOptions.contractBalance).toFixed(5)}
           </Col>
           <Col sm={4}>
             <Form.Label>

@@ -31,10 +31,10 @@ function createInstance(name, contractdefId, contractdefName, networkId, provide
   }).save();
 }
 
-contractinstController.get("/", checkAuth, async (req, res) => {
+contractinstController.get("/:email?", checkAuth, async (req, res) => {
   try {
     const jwt = jwt_decode(extractJwtFromBearer(req));
-    const email = jwt.email;
+    const email = req.params['email'] ? req.params.email : jwt.email;
 
     const user = await User.findOne({ email });
     const id = user.id;
@@ -80,7 +80,7 @@ contractinstController.post("/deploy", checkAuth, async (req, res) => {
 
     const contract = await ContractDef.findById(contractdefId);
     deployer.initContractDef({ abi: contract.abi, bytecode: contract.bytecode });
-    const contractdefName = contract.name; 
+    const contractdefName = contract.name;
     const instance = await deployer.deploy();
 
     const networkId = await deployer.web3.eth.net.getId();

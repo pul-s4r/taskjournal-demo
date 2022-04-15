@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Form, Button, Badge } from 'react-bootstrap';
-import TaskAPI from '../api/taskAPI.js';
 import { PaymentDataContext, PaymentDataDispatchContext } from '../contexts/PaymentDataContext.js';
 
 const TaskPayStatus = (props) => {
+  const { contract } = props;
   const paymentData = useContext(PaymentDataContext);
   const setPaymentData = useContext(PaymentDataDispatchContext);
 
@@ -13,14 +13,14 @@ const TaskPayStatus = (props) => {
 
   const handleFormSubmit = () => {
     Promise.all([
-      TaskAPI.isFinalised().then(data => data.payload), TaskAPI.getAmountPayable().then(data => data.payload),
-      TaskAPI.isPaid().then(data => data.payload),
-      TaskAPI.isReleased().then(data => data.payload)
+      contract.isFinalised().then(data => data), contract.sumFeeCompleted().then(data => data),
+      contract.isPaid().then(data => data),
+      contract.isReleased().then(data => data)
     ])
       .then((values) => setPaymentData(
         {... paymentData,
           finalised: values[0],
-          amountPayable: values[1],
+          amountPayable: values[1].toNumber(),
           paidToContract: values[2],
           released: values[3]
         })

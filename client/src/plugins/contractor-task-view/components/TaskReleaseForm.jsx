@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Form, Button, Badge } from 'react-bootstrap';
-import TaskAPI from '../api/taskAPI.js';
 
 const TaskReleaseForm = (props) => {
+  const { contract } = props;
 
   const [displayOptions, setDisplayOptions] = useState({
     status: "Pending",
@@ -11,15 +11,15 @@ const TaskReleaseForm = (props) => {
   });
 
   const handleFormSubmit = () => {
-    TaskAPI.transferToContractor().then((data) => {
+    contract.transferToContractor().then((data) => {
 
     });
   };
 
   const handleFormRefresh = () => {
     Promise.all([
-      TaskAPI.getContractorAccountBalance().then(data => data.payload),
-      TaskAPI.getContractBalance().then(data => data.payload)
+      NaN,
+      contract.getBalance().then(data => data)
     ])
       .then((values) => setDisplayOptions(
         {... displayOptions,
