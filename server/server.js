@@ -41,3 +41,5 @@ app.listen(port, () => {
       console.log(`Conneted to mongoDB at ${mongoHostName}`);
     });
 });
+
+export default app; 
