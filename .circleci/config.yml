@@ -20,7 +20,7 @@ jobs:
       # - persist_to_workspace:
       #     root: ~/project
       #     paths:
-            - .
+      #      - .
   # deploy: # this can be any name you choose
   #   docker:
   #     - image: cimg/node:17.2.0
