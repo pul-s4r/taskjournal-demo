@@ -9,7 +9,7 @@
     "dev-webpack": "ENV=development node_modules/.bin/webpack --watch",
     "dev-back": "nodemon --openssl-legacy-provider server.js && npm run dev-webpack",
     "start": "concurrently \"npm run dev-back\" \"npm run dev-front\"",
-    "test": "mocha"
+    "test": "CI=true ganache 2>&1 & sleep 1 && mocha --exit"
   },
   "author": "",
   "license": "ISC",
@@ -42,6 +42,7 @@
     "@babel/preset-env": "^7.16.11",
     "babel-loader": "^8.2.3",
     "chai": "^4.3.6",
+    "ganache": "^7.0.4",
     "mocha": "^9.2.2",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "webpack": "^5.68.0",
