@@ -12,7 +12,7 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          command: cd server && npm test
+          command: "cd server && npm test"
           name: Run tests
       # - run:
       #     command: npm build
