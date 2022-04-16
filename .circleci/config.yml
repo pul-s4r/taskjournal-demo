@@ -5,23 +5,25 @@ orbs:
 
 jobs:
   build_and_test:
-    working_directory: ~/project/server
+    working_directory: ~/project
     docker:
       - image: cimg/node:17.2.0
     steps:
-      - checkout
+      - checkout:
+          path: ~/project
       - node/install-packages:
           app-dir: ~/project/server
-          cache-path: node_modules
+          cache-path: ~/project/server/node_modules
           pkg-manager: npm
       - run:
-          command: "cd server && npm test"
+          app-dir: ~/project/server
+          command: "npm test"
           name: Run tests
       # - run:
       #     command: npm build
       #     name: Build app
       # - persist_to_workspace:
-      #     root: ~/project
+      #     root: ~/project/server
       #     paths:
       #      - .
   # deploy: # this can be any name you choose
@@ -29,7 +31,7 @@ jobs:
   #     - image: cimg/node:17.2.0
   #   steps:
   #     - attach_workspace:
-  #         at: ~/project
+  #         at: ~/project/server
   #     - heroku/deploy-via-git:
   #         force: true # force push when pushing to the heroku remote, see: https://devcenter.heroku.com/articles/git
 
