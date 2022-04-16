@@ -5,12 +5,13 @@ orbs:
 
 jobs:
   build_and_test:
+    working_directory: ~/project/server
     docker:
       - image: cimg/node:17.2.0
     steps:
       - checkout
       - node/install-packages:
-          app-dir: ~/server
+          app-dir: ~/project/server
           cache-path: node_modules
           pkg-manager: npm
       - run:
