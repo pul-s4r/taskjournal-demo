@@ -1,0 +1,65 @@
+version: 2.1
+orbs:
+  node: circleci/node@5.0.2
+  # heroku: circleci/heroku@1.2.6
+
+jobs:
+  build_and_test:
+    working_directory: ~/project
+    docker:
+      - image: cimg/node:17.2.0
+    steps:
+      - checkout:
+          path: ~/project
+      - node/install-packages:
+          app-dir: ~/project/server
+          cache-path: ~/project/server/node_modules
+          pkg-manager: npm
+      - run:
+          app-dir: ~/project/server
+          command: "cd server && npm test"
+          name: Run tests
+      # - run:
+      #     command: npm build
+      #     name: Build app
+      # - persist_to_workspace:
+      #     root: ~/project/server
+      #     paths:
+      #      - .
+  # deploy: # this can be any name you choose
+  #   docker:
+  #     - image: cimg/node:17.2.0
+  #   steps:
+  #     - attach_workspace:
+  #         at: ~/project/server
+  #     - heroku/deploy-via-git:
+  #         force: true # force push when pushing to the heroku remote, see: https://devcenter.heroku.com/articles/git
+
+workflows:
+  on_commit:
+    jobs:
+      - build_and_test
+      # - deploy:
+      #     requires:
+      #       - build_and_test # only deploy if the build_and_test job has completed
+      #     filters:
+      #       branches:
+      #         only: master # only deploy when on main/master
+  # nightly:
+  #   triggers:
+  #     - schedule:
+  #         cron: "0 0 * * *"
+  #         filters:
+  #           branches:
+  #             only:
+  #               - main
+  #               - frontend-plugin-system
+  #               - server-test
+  #   jobs:
+  #     - build_and_test
+      # - deploy:
+      #     requires:
+      #       - build_and_test # only deploy if the build_and_test job has completed
+      #     filters:
+      #       branches:
+      #         only: master # only deploy when on main/master
