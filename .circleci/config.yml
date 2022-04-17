@@ -8,6 +8,7 @@ jobs:
     working_directory: ~/project
     docker:
       - image: cimg/node:17.2.0
+      - image: circleci/mongo:5.0.6
     steps:
       - checkout:
           path: ~/project
@@ -15,6 +16,15 @@ jobs:
           app-dir: ~/project/server
           cache-path: ~/project/server/node_modules
           pkg-manager: npm
+      - run:
+          command: >
+            curl -fsSL https://www.mongodb.org/static/pgp/server-5.0.asc | sudo apt-key add -
+            && echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
+            && sudo apt update
+            && sudo apt install mongodb-org-shell
+          name: Install MongoDB
+      - run:
+          command: "mongo --eval 'db'"
       - run:
           app-dir: ~/project/server
           command: "cd server && npm test"
