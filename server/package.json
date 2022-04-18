@@ -4,12 +4,17 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "dev-contract": "export NODE_OPTIONS=--openssl-legacy-provider truffle migrate",
+    "dev-contract-truffle": "export NODE_OPTIONS=--openssl-legacy-provider truffle migrate",
+    "dev-contract-provider": "ganache",
+    "prod-contract-provider": "ganache",
     "dev-front": "cd ../client && npm start",
+    "prod-front": "cd ../client && npm run build && npm run serve",
     "dev-webpack": "ENV=development node_modules/.bin/webpack --watch",
     "dev-back": "nodemon --openssl-legacy-provider server.js && npm run dev-webpack",
+    "prod-back": "NODE_ENV=production nodemon --openssl-legacy-provider server.js",
     "start": "concurrently \"npm run dev-back\" \"npm run dev-front\"",
-    "test": "CI=true ganache 2>&1 & sleep 1 && mocha --timeout 50000 --exit"
+    "test": "CI=true ganache 2>&1 & sleep 1 && mocha --timeout 50000 --exit",
+    "build": "concurrently \"npm run prod-contract-provider\" \"npm run prod-back\" \"npm run prod-front\""
   },
   "author": "",
   "license": "ISC",
