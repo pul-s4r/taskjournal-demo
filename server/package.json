@@ -14,7 +14,8 @@
     "prod-back": "NODE_ENV=production nodemon --openssl-legacy-provider server.js",
     "start": "concurrently \"npm run dev-back\" \"npm run dev-front\"",
     "test": "CI=true ganache 2>&1 & sleep 1 && mocha --timeout 50000 --exit",
-    "build": "concurrently \"npm run prod-contract-provider\" \"npm run prod-back\" \"npm run prod-front\""
+    "build-full": "concurrently \"npm run prod-contract-provider\" \"npm run prod-back\" \"npm run prod-front\"",
+    "build": "concurrently \"npm run prod-contract-provider\" \"npm run prod-back\""
   },
   "author": "",
   "license": "ISC",
