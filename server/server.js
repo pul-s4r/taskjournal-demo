@@ -5,8 +5,10 @@ import journalRoutes from './routes/journalRoutes.js'
 
 import passport from 'passport';
 import mongoose from 'mongoose';
+import 'dotenv/config';
 
-import { config } from './store/config.js';
+// import { config } from './store/config.js';
+import { config as dbConfig } from './database/config.js';
 import { applyPassportStrategy } from './store/passport.js';
 import { userController } from './controller/index.js';
 import { contractdefController } from './controller/index.js';
@@ -32,14 +34,18 @@ app.use('/auth', userController);
 app.use('/contract/definition', contractdefController);
 app.use('/contract/instance', contractinstController);
 
-const { mongoDBUri, mongoHostName } = config.env;
+const { mongoDBUri, mongoHostName } = dbConfig.env;
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
-  mongoose
-    .connect(mongoDBUri, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
-      console.log(`Connected to mongoDB at ${mongoHostName}`);
-    });
+  try {
+    mongoose
+      .connect(mongoDBUri, { useNewUrlParser: true, useUnifiedTopology: true })
+      .then(() => {
+        console.log(`Connected to mongoDB at ${mongoHostName}`);
+      });
+  } catch (error) {
+    console.error("Could not connect to mongoDB, reason: ", error);
+  }
 });
 
-export default app; 
+export default app;
