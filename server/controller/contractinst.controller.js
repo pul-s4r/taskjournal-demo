@@ -11,8 +11,10 @@ import { config as networkconf } from '../deployer/network.conf.js';
 const extractJwtFromBearer = ExtractJwt.fromAuthHeaderAsBearerToken();
 
 const contractinstController = express.Router();
-const deployer = new Web3Deployer({ ethereumUrl: `http://${networkconf.development.host}:${networkconf.development.port}` });
-await deployer.setup();
+
+const ethNodeUri = process.env.NODE_ENV === "production" ? `${networkconf.production.host}` : `http://${networkconf.development.host}:${networkconf.development.port}`;
+const deployer = new Web3Deployer({ ethereumUrl: ethNodeUri });
+await deployer.setup(process.env.PROVISIONING_ACCOUNT, process.env.PROVISIONING_PKEY);
 
 import {
   checkAuth

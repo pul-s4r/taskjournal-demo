@@ -9,6 +9,10 @@ class Web3Deployer {
     this.provider = null;
     this.instance = null;
     this.bytecode = null;
+    this.signer = null;
+
+    this.provAccount = null;
+    this.provPrivateKey = null;
   }
 
   initProvider() {
@@ -18,6 +22,15 @@ class Web3Deployer {
     }
     this.provider = new Web3.providers.HttpProvider(ethereumUrl);
     this.web3 = new Web3(this.provider);
+  }
+
+  initProvisioningAccount(address, pkey) {
+    this.provAccount = address;
+    this.pkey = pkey;
+    this.signer = this.web3.eth.accounts.privateKeyToAccount(
+      pkey
+    );
+    this.web3.eth.accounts.wallet.add(this.signer);
   }
 
   initAccounts() {
@@ -52,20 +65,24 @@ class Web3Deployer {
     this.bytecode = artifact.bytecode;
   }
 
-  async setup() {
+  async setup(address="", pkey="") {
     this.initProvider();
+    this.initProvisioningAccount(address, pkey);
     await this.initAccounts();
   }
 
   async deploy(account = null) {
-    account = this.web3.utils.isAddress(account) ? account : this.accounts[0];
+    account = this.web3.utils.isAddress(account) ? account : this.provAccount;
     return new Promise((resolve, reject) => {
-      this.contractdef.deploy({data: this.bytecode})
-        .send({
+      if (process.env.NODE_ENV === "production") {
+        this.contractdef.options.data = this.bytecode;
+        const deployTx = this.contractdef.deploy();
+        const deployedContract = deployTx.send({
           from: account,
           gas: 5000000,
         })
         .then((deployment) => {
+          console.log("[Prod] deployed at: ", deployment.options.address);
           this.instance = deployment;
           this.address = deployment.options.address;
           resolve(deployment);
@@ -76,6 +93,24 @@ class Web3Deployer {
           reject(err);
           return err;
         });
+      } else {
+        this.contractdef.deploy({data: this.bytecode})
+          .send({
+            from: account,
+            gas: 5000000,
+          })
+          .then((deployment) => {
+            this.instance = deployment;
+            this.address = deployment.options.address;
+            resolve(deployment);
+            return deployment;
+          })
+          .catch((err) => {
+            console.error(err);
+            reject(err);
+            return err;
+          });
+      }
     });
   }
 }
