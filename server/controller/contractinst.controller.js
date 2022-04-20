@@ -13,8 +13,14 @@ const extractJwtFromBearer = ExtractJwt.fromAuthHeaderAsBearerToken();
 const contractinstController = express.Router();
 
 const ethNodeUri = process.env.NODE_ENV === "production" ? `${networkconf.production.host}` : `http://${networkconf.development.host}:${networkconf.development.port}`;
-const deployer = new Web3Deployer({ ethereumUrl: ethNodeUri });
-await deployer.setup(process.env.PROVISIONING_ACCOUNT, process.env.PROVISIONING_PKEY);
+
+var deployer = null;
+try {
+  deployer = new Web3Deployer({ ethereumUrl: ethNodeUri });
+  await deployer.setup(process.env.PROVISIONING_ACCOUNT, process.env.PROVISIONING_PKEY);
+} catch(error) {
+  console.error("Error setting up contract deployer: ", error);
+}
 
 import {
   checkAuth
