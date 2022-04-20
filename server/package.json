@@ -12,7 +12,9 @@
     "dev-webpack": "ENV=development node_modules/.bin/webpack --watch",
     "dev-back": "nodemon --openssl-legacy-provider server.js && npm run dev-webpack",
     "prod-back": "NODE_ENV=production nodemon server.js",
-    "start": "concurrently \"npm run dev-back\" \"npm run dev-front\"",
+    "start:dev": "concurrently \"npm run dev-back\" \"npm run dev-front\"",
+    "start:prod": "concurrently \"npm run prod-back\" \"npm run prod-front\"",
+    "start": "npm run start:prod",
     "test": "CI=true ganache 2>&1 & sleep 1 && mocha --timeout 50000 --exit",
     "build-full": "concurrently \"npm run prod-contract-provider\" \"npm run prod-back\" \"npm run prod-front\"",
     "build": "npm run prod-back"
