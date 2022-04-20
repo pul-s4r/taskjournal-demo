@@ -8,7 +8,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "cd server && npm run start", 
+    "ci-server": "cd server && npm ci && cd ../",
+    "ci-client": "cd client && npm ci && cd ../",
+    "start": "npm run ci-server && npm run ci-client && cd server && npm run start", 
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
